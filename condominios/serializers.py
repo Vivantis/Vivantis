@@ -9,7 +9,8 @@ from .models import (
     ControleAcesso,
     Correspondencia,
     ReservaEspaco,
-    EspacoComum
+    EspacoComum,
+    Documento
 )
 
 # ─────────────────────────────────────────────────────────────
@@ -101,3 +102,11 @@ class ReservaEspacoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReservaEspaco
         fields = '__all__'  # Inclui morador, unidade, espaço, data, horário, etc.
+
+# ─────────────────────────────────────────────────────────────
+# Serializer para o modelo Documento
+# ─────────────────────────────────────────────────────────────
+class DocumentoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Documento
+        fields = '__all__'  # Inclui todos os campos do modelo Documento

@@ -36,3 +36,5 @@ urlpatterns += correspondencias_urls  # Adiciona as rotas de correspondências
 from .urls_reservas import urlpatterns as reservas_urls
 urlpatterns += reservas_urls  # Adiciona as rotas de espaços e reservas
 
+from .urls_documentos import urlpatterns as documentos_urls
+urlpatterns += documentos_urls  # Adiciona as rotas de documentos

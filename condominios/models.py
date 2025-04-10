@@ -175,3 +175,37 @@ class ReservaEspaco(models.Model):
     def __str__(self):
         return f"{self.espaco.nome} - {self.data_reserva} ({self.get_status_display()})"
 
+from django.contrib.auth.models import User
+
+# ─────────────────────────────────────────────────────────────
+# 📂 Modelo de Documentos do Condomínio
+# ─────────────────────────────────────────────────────────────
+class Documento(models.Model):
+    TIPO_CHOICES = [
+        ('regulamento', 'Regulamento Interno'),
+        ('ata', 'Ata de Reunião'),
+        ('edital', 'Edital'),
+        ('boleto', 'Boleto'),
+        ('outro', 'Outro'),
+    ]
+
+    titulo = models.CharField(max_length=200)  # Nome ou assunto do documento
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default='outro')
+    arquivo = models.FileField(upload_to='documentos/')  # Upload do arquivo
+    visivel_para_moradores = models.BooleanField(default=True)  # Exibir ou não
+    data_envio = models.DateTimeField(auto_now_add=True)  # Registro de envio
+
+    enviado_por = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True,
+        help_text="Usuário que fez o upload"
+    )
+
+    condominio = models.ForeignKey(
+        Condominio,
+        on_delete=models.CASCADE,
+        help_text="Condomínio ao qual o documento pertence"
+    )
+
+    def __str__(self):
+        return f"{self.titulo} - {self.get_tipo_display()}"
+
