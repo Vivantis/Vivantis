@@ -12,7 +12,8 @@ from .models import (
     EspacoComum,
     Documento,
     AdministradorGeral,
-    Aviso
+    Aviso,
+    Manutencao
 )
 
 # ─────────────────────────────────────────────────────────────
@@ -130,4 +131,12 @@ class AdministradorGeralSerializer(serializers.ModelSerializer):
 class AvisoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Aviso
-        fields = '__all__'  # Inclui todos os campos do modelo Aviso 
+        fields = '__all__'  # Inclui todos os campos do modelo Aviso
+
+# ─────────────────────────────────────────────────────────────
+# Serializer para o modelo Manutencao
+# ─────────────────────────────────────────────────────────────
+class ManutencaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manutencao
+        fields = '__all__'  # Inclui todos os campos do modelo Manutencao 

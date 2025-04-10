@@ -45,3 +45,5 @@ urlpatterns += administradores_urls  # Adiciona as rotas de administradores gera
 from .urls_avisos import urlpatterns as avisos_urls
 urlpatterns += avisos_urls  # Adiciona as rotas de avisos
 
+from .urls_manutencao import urlpatterns as manutencao_urls
+urlpatterns += manutencao_urls  # Adiciona as rotas de manutenções

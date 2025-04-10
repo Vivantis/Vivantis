@@ -245,3 +245,24 @@ class Aviso(models.Model):
 
     def __str__(self):
         return f"{self.titulo} ({self.condominio.nome})"
+
+# ─────────────────────────────────────────────────────────────
+# 🔧 Modelo de Manutenção
+# ─────────────────────────────────────────────────────────────
+class Manutencao(models.Model):
+    STATUS_CHOICES = [
+        ('planejada', 'Planejada'),
+        ('em_andamento', 'Em andamento'),
+        ('concluida', 'Concluída'),
+    ]
+
+    titulo = models.CharField(max_length=150)  # Título da manutenção (ex: "Manutenção do elevador")
+    descricao = models.TextField()              # Descrição detalhada
+    data_inicio = models.DateTimeField()       # Data de início da manutenção
+    data_fim = models.DateTimeField()          # Data de fim da manutenção
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='planejada')
+    condominio = models.ForeignKey(Condominio, on_delete=models.CASCADE)
+    criado_por = models.ForeignKey(User, on_delete=models.CASCADE)  # Quem registrou a manutenção
+
+    def __str__(self):
+        return f"{self.titulo} - {self.get_status_display()}"
