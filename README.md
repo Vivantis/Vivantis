@@ -14,6 +14,7 @@ Sistema inteligente e modular para gestão de condomínios, desenvolvido com Dja
 - Ocorrências (problemas, solicitações)
 - Correspondências (entregas e retiradas)
 - Espaços comuns e reservas por moradores
+- Compartilhamento de documentos (regulamentos, boletos, atas)
 - Autenticação JWT protegendo toda a API
 - Documentação Swagger interativa
 - Testes automatizados por módulo
@@ -135,6 +136,7 @@ python manage.py runserver
 | Correspondência      | ✅ Completo |
 | Espaço Comum         | ✅ Completo |
 | Reserva de Espaços   | ✅ Completo |
+| Documentos           | ✅ Completo |
 
 ---
 
@@ -149,13 +151,14 @@ python manage.py test
 Testes cobrem:
 - CRUD de todos os módulos principais
 - Respostas e status da API
+- Upload de arquivos
 - Criação e autenticação de usuário
 
 ---
 
 ## 👨‍💻 Autor
 
-Projeto desenvolvido por **Vitor Alves**, **Caio Ferreira** e **Lucas Leal**  
+Projeto desenvolvido por **Vitor Alves**, **Lucas Leal** e **Caio Ferreira**  
 Visão de inovação, automação e experiência condominial com IA ⚙️
 
 ---
