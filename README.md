@@ -1,29 +1,32 @@
 # 🏢 Vivantis – Sistema de Gestão de Condomínio com IA
 
-Sistema inteligente para gestão de condomínios com foco em automação, eficiência e comunicação clara entre síndicos, moradores e prestadores de serviço. Desenvolvido com **Django**, **PostgreSQL**, **JWT** e arquitetura modular via API REST.
+Sistema inteligente e modular para gestão de condomínios, desenvolvido com Django, PostgreSQL, JWT e Swagger. Permite automação de processos, registro de dados, segurança de acesso e experiências futuras com inteligência artificial.
 
 ---
 
 ## ✨ Funcionalidades atuais
 
-- Cadastro e gestão de condomínios
-- Cadastro de unidades e vínculo com moradores
-- Registro de moradores e suas unidades
-- Autenticação com JWT
-- Cadastro de prestadores de serviço
-- Documentação interativa da API via Swagger
-- Testes automatizados com cobertura básica
-- Banco de dados PostgreSQL
-- Proteção por autenticação e permissões (token obrigatório)
+- Cadastro de condomínios e suas unidades
+- Registro de moradores com vínculo à unidade
+- Gestão de prestadores de serviço
+- Registro de visitantes e controle de entrada
+- Controle de acesso (entrada e saída)
+- Ocorrências (problemas, solicitações)
+- Correspondências (entregas e retiradas)
+- Espaços comuns e reservas por moradores
+- Autenticação JWT protegendo toda a API
+- Documentação Swagger interativa
+- Testes automatizados por módulo
 
 ---
 
-## 🧠 Inteligência Artificial (em construção futura)
+## 🧠 IA e recursos futuros
 
-- Processamento inteligente de ocorrências
-- Geração de relatórios de gestão com insights
-- IA para priorização de demandas e previsões administrativas
-- Automatização de comunicação com moradores
+- Classificação inteligente de ocorrências por urgência
+- Geração de relatórios e dashboards
+- Análise de ocupação de espaços
+- Previsão de fluxo de visitantes
+- Alertas proativos para gestão
 
 ---
 
@@ -34,7 +37,7 @@ Sistema inteligente para gestão de condomínios com foco em automação, efici�
 - Django REST Framework
 - PostgreSQL
 - SimpleJWT (autenticação)
-- drf-spectacular (Swagger UI)
+- drf-spectacular (Swagger)
 - Git e GitHub
 
 ---
@@ -44,7 +47,7 @@ Sistema inteligente para gestão de condomínios com foco em automação, efici�
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/viithalves/Vivantis.git
+git clone https://github.com/seu-usuario/Vivantis.git
 cd Vivantis
 ```
 
@@ -61,13 +64,15 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-### 4. Configure o banco de dados PostgreSQL em `settings.py`
+### 4. Configure o banco de dados PostgreSQL
+
+No `settings.py`:
 
 ```python
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nome_do_banco',
+        'NAME': 'vivantis_db',
         'USER': 'seu_usuario',
         'PASSWORD': 'sua_senha',
         'HOST': 'localhost',
@@ -76,7 +81,7 @@ DATABASES = {
 }
 ```
 
-### 5. Rode as migrações e crie um superusuário
+### 5. Migre e crie um superusuário
 
 ```bash
 python manage.py makemigrations
@@ -84,7 +89,7 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-### 6. Rode o servidor local
+### 6. Rode o servidor
 
 ```bash
 python manage.py runserver
@@ -102,7 +107,7 @@ python manage.py runserver
   ```http
   POST /api/token/refresh/
   ```
-- Use nos headers:
+- Header:
   ```
   Authorization: Bearer <seu_token>
   ```
@@ -116,39 +121,46 @@ python manage.py runserver
 
 ---
 
-## ✅ Módulos implementados até agora
+## ✅ Módulos implementados
 
-| Módulo       | Status | Funcionalidade                             |
-|--------------|--------|--------------------------------------------|
-| Condomínio   | ✅     | Cadastro e listagem de condomínios         |
-| Unidade      | ✅     | Cadastro e vínculo com condomínio          |
-| Morador      | ✅     | Cadastro e vínculo com unidade             |
-| Ocorrência   | 🔄     | Em andamento                               |
-| Prestadores  | ✅     | Cadastro e vínculo com condomínio          |
+| Módulo               | Status     |
+|----------------------|------------|
+| Condomínio           | ✅ Completo |
+| Unidade              | ✅ Completo |
+| Morador              | ✅ Completo |
+| Prestador            | ✅ Completo |
+| Ocorrência           | ✅ Completo |
+| Visitante            | ✅ Completo |
+| Controle de Acesso   | ✅ Completo |
+| Correspondência      | ✅ Completo |
+| Espaço Comum         | ✅ Completo |
+| Reserva de Espaços   | ✅ Completo |
 
 ---
 
-## 🧪 Testes
+## 🧪 Testes automatizados
 
-Executar:
+Executar todos os testes:
 
 ```bash
 python manage.py test
 ```
 
-Testes incluídos para:
-- Condomínios
-- Unidades
-- Moradores
-- Prestadores
+Testes cobrem:
+- CRUD de todos os módulos principais
+- Respostas e status da API
+- Criação e autenticação de usuário
 
 ---
 
-## 🤝 Contribuição e Time
+## 👨‍💻 Autor
 
-Este projeto é construído por uma equipe com visão estratégica e foco em inovação para soluções condominiais.  
-Contribuições são bem-vindas!  
-Autor atual: **Vitor Alves**
+Projeto desenvolvido por **Vitor Alves**  
+Visão de inovação, automação e experiência condominial com IA ⚙️
 
 ---
 
+## 🤝 Contribuições
+
+Contribuições futuras são bem-vindas!  
+Abra uma issue ou envie um pull request ✨
