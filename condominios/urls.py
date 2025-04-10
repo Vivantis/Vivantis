@@ -1,21 +1,38 @@
-# condominios/urls.py
-
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
+# ───── ViewSets principais ─────
 from .views import CondominioViewSet, UnidadeViewSet, MoradorViewSet
-from .views_prestadores import PrestadorViewSet  # Importa o ViewSet de prestadores
+from .views_prestadores import PrestadorViewSet
 
-# Cria um roteador padrão do DRF
+# ───── Roteador padrão do Django REST Framework ─────
 router = DefaultRouter()
 
-# Registra os módulos no roteador
+# ───── Registro de rotas principais ─────
 router.register(r'condominios', CondominioViewSet)
 router.register(r'unidades', UnidadeViewSet)
 router.register(r'moradores', MoradorViewSet)
-router.register(r'prestadores', PrestadorViewSet)  # Novo módulo adicionado aqui
+router.register(r'prestadores', PrestadorViewSet)
 
-# Define as rotas da aplicação condominios
+# ───── URLs da aplicação 'condominios' ─────
 urlpatterns = [
-    path('', include(router.urls)),  # Inclui todas as rotas registradas acima
+    path('', include(router.urls)),  # Inclui rotas principais registradas acima
 ]
+
+# ───── URLs modulares adicionais (ocorrências e visitantes) ─────
+from .urls_ocorrencias import urlpatterns as ocorrencias_urls
+urlpatterns += ocorrencias_urls
+
+from .urls_visitantes import urlpatterns as visitantes_urls
+urlpatterns += visitantes_urls
+
+
+from .urls_acesso import urlpatterns as acesso_urls
+urlpatterns += acesso_urls  # Adiciona as rotas do módulo Controle de Acesso
+
+from .urls_correspondencias import urlpatterns as correspondencias_urls
+urlpatterns += correspondencias_urls  # Adiciona as rotas de correspondências
+
+from .urls_reservas import urlpatterns as reservas_urls
+urlpatterns += reservas_urls  # Adiciona as rotas de espaços e reservas
+

@@ -1,7 +1,9 @@
 from django.db import models
 
 
-# Modelo que representa um Condomínio
+# ─────────────────────────────────────────────────────────────
+# 🏢 Modelo que representa um Condomínio
+# ─────────────────────────────────────────────────────────────
 class Condominio(models.Model):
     nome = models.CharField(max_length=100)  # Nome do condomínio
     endereco = models.TextField()            # Endereço completo
@@ -10,33 +12,51 @@ class Condominio(models.Model):
         return self.nome
 
 
-# Modelo que representa uma Unidade dentro de um condomínio
+# ─────────────────────────────────────────────────────────────
+# 🏠 Modelo que representa uma Unidade dentro de um condomínio
+# ─────────────────────────────────────────────────────────────
 class Unidade(models.Model):
     numero = models.CharField(max_length=10)                     
-    bloco = models.CharField(max_length=10, null=True, blank=True)  # agora oficialmente opcional
+    bloco = models.CharField(max_length=10, null=True, blank=True)  # Opcional
     condominio = models.ForeignKey(Condominio, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Apto {self.numero} - {self.condominio.nome}"
 
 
-
-# Modelo que representa um Morador
+# ─────────────────────────────────────────────────────────────
+# 👤 Modelo que representa um Morador
+# ─────────────────────────────────────────────────────────────
 class Morador(models.Model):
     nome = models.CharField(max_length=100)                      # Nome completo
     email = models.EmailField()                                  # E-mail do morador
     unidade = models.ForeignKey(
         Unidade,
         on_delete=models.CASCADE,
-        null=True,   # Permite migração sem crash por registros antigos
-        blank=True   # Permite deixar em branco em formulários/admin
+        null=True,   # Permite registros antigos sem unidade
+        blank=True   # Permite campo em branco em formulários
     )
 
     def __str__(self):
         return self.nome
 
 
-# Modelo que representa uma Ocorrência (chamado aberto pelo morador)
+# ─────────────────────────────────────────────────────────────
+# 🛠️ Modelo que representa um Prestador de Serviços
+# ─────────────────────────────────────────────────────────────
+class Prestador(models.Model):
+    nome = models.CharField(max_length=100)           # Nome do prestador
+    tipo_servico = models.CharField(max_length=100)   # Tipo de serviço (ex: Limpeza)
+    telefone = models.CharField(max_length=20)        # Telefone de contato
+    condominio = models.ForeignKey(Condominio, on_delete=models.CASCADE)  # Associação ao condomínio
+
+    def __str__(self):
+        return self.nome
+
+
+# ─────────────────────────────────────────────────────────────
+# 📢 Modelo que representa uma Ocorrência (aberta por morador)
+# ─────────────────────────────────────────────────────────────
 class Ocorrencia(models.Model):
     STATUS_CHOICES = [
         ('aberta', 'Aberta'),
@@ -44,29 +64,114 @@ class Ocorrencia(models.Model):
         ('resolvida', 'Resolvida'),
     ]
 
-    titulo = models.CharField(max_length=100)                         # Título curto da ocorrência
-    descricao = models.TextField()                                    # Descrição detalhada
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='aberta')  # Status
-    criado_em = models.DateTimeField(auto_now_add=True)               # Criada automaticamente
-    atualizado_em = models.DateTimeField(auto_now=True)              # Atualizada automaticamente
-    morador = models.ForeignKey(Morador, on_delete=models.CASCADE)   # Quem registrou
+    titulo = models.CharField(max_length=100)                        # Título da ocorrência
+    descricao = models.TextField()                                   # Detalhes
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='aberta')  # Status atual
+    criado_em = models.DateTimeField(auto_now_add=True)              # Timestamp de criação
+    atualizado_em = models.DateTimeField(auto_now=True)              # Timestamp de última edição
+    morador = models.ForeignKey(Morador, on_delete=models.CASCADE)   # Quem abriu
     unidade = models.ForeignKey(Unidade, on_delete=models.CASCADE)   # Unidade associada
 
     def __str__(self):
         return f"{self.titulo} - {self.get_status_display()}"
 
-class Prestador(models.Model):
-    # Nome do prestador
-    nome = models.CharField(max_length=100)
 
-    # Tipo de serviço (ex: limpeza, elétrica, jardinagem)
-    tipo_servico = models.CharField(max_length=100)
+# ─────────────────────────────────────────────────────────────
+# 👥 Modelo que representa um Visitante
+# ─────────────────────────────────────────────────────────────
+class Visitante(models.Model):
+    nome = models.CharField(max_length=100)             # Nome completo do visitante
+    documento = models.CharField(max_length=50)         # Documento de identificação (RG, CPF, etc.)
+    data_visita = models.DateTimeField(auto_now_add=True)  # Data e hora da visita
+    
+    unidade = models.ForeignKey(
+        Unidade,
+        on_delete=models.CASCADE,
+        help_text="Unidade que está recebendo o visitante"
+    )
 
-    # Telefone de contato
-    telefone = models.CharField(max_length=20)
-
-    # Relacionamento com o condomínio onde presta serviço
-    condominio = models.ForeignKey('Condominio', on_delete=models.CASCADE)
+    morador_responsavel = models.ForeignKey(
+        Morador,
+        on_delete=models.CASCADE,
+        help_text="Morador que autorizou a entrada"
+    )
 
     def __str__(self):
-        return self.nome
+        return f"{self.nome} - Unidade {self.unidade}"
+
+# ─────────────────────────────────────────────────────────────
+# 🚪 Modelo de Controle de Acesso
+# ─────────────────────────────────────────────────────────────
+class ControleAcesso(models.Model):
+    TIPO_CHOICES = [
+        ('morador', 'Morador'),
+        ('visitante', 'Visitante'),
+        ('prestador', 'Prestador'),
+    ]
+
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)  # Define o tipo de pessoa
+    morador = models.ForeignKey('Morador', on_delete=models.SET_NULL, null=True, blank=True)
+    visitante = models.ForeignKey('Visitante', on_delete=models.SET_NULL, null=True, blank=True)
+    prestador = models.ForeignKey('Prestador', on_delete=models.SET_NULL, null=True, blank=True)
+
+    data_entrada = models.DateTimeField(auto_now_add=True)  # Registrado automaticamente ao entrar
+    data_saida = models.DateTimeField(null=True, blank=True)  # Pode ser registrado depois
+
+    unidade = models.ForeignKey('Unidade', on_delete=models.SET_NULL, null=True, blank=True)
+    observacoes = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.get_tipo_display()} - Entrada: {self.data_entrada.strftime('%d/%m/%Y %H:%M')}"
+
+# ─────────────────────────────────────────────────────────────
+# 📦 Modelo de Correspondência (entregas e encomendas)
+# ─────────────────────────────────────────────────────────────
+class Correspondencia(models.Model):
+    descricao = models.CharField(max_length=200)  # Ex: "Encomenda da Amazon", "Carta registrada"
+    morador = models.ForeignKey('Morador', on_delete=models.CASCADE)  # Destinatário
+    unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE)  # Unidade relacionada
+
+    data_recebimento = models.DateTimeField(auto_now_add=True)  # Quando foi recebida na portaria
+    data_retirada = models.DateTimeField(null=True, blank=True)  # Quando foi retirada (se já foi)
+
+    entregue_por = models.CharField(max_length=100, blank=True)  # Ex: Correios, Mercado Livre
+    observacoes = models.TextField(blank=True)  # Qualquer anotação adicional
+
+    def __str__(self):
+        return f"{self.descricao} - {self.morador.nome}"
+
+# ─────────────────────────────────────────────────────────────
+# 🧱 Modelo de Espaços Comuns (ex: salão, churrasqueira)
+# ─────────────────────────────────────────────────────────────
+class EspacoComum(models.Model):
+    nome = models.CharField(max_length=100)  # Ex: "Salão de Festas", "Churrasqueira"
+    condominio = models.ForeignKey('Condominio', on_delete=models.CASCADE)  # Qual condomínio possui esse espaço
+
+    def __str__(self):
+        return f"{self.nome} ({self.condominio.nome})"
+
+
+# ─────────────────────────────────────────────────────────────
+# 📅 Modelo de Reserva de Espaço
+# ─────────────────────────────────────────────────────────────
+class ReservaEspaco(models.Model):
+    STATUS_CHOICES = [
+        ('pendente', 'Pendente'),
+        ('aprovado', 'Aprovado'),
+        ('cancelado', 'Cancelado'),
+    ]
+
+    morador = models.ForeignKey('Morador', on_delete=models.CASCADE)
+    unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE)
+    espaco = models.ForeignKey('EspacoComum', on_delete=models.CASCADE)
+
+    data_reserva = models.DateField()
+    horario_inicio = models.TimeField()
+    horario_fim = models.TimeField()
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
+    observacoes = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.espaco.nome} - {self.data_reserva} ({self.get_status_display()})"
+
