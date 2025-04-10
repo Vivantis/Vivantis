@@ -41,3 +41,7 @@ urlpatterns += documentos_urls  # Adiciona as rotas de documentos
 
 from .urls_administradores import urlpatterns as administradores_urls
 urlpatterns += administradores_urls  # Adiciona as rotas de administradores gerais
+
+from .urls_avisos import urlpatterns as avisos_urls
+urlpatterns += avisos_urls  # Adiciona as rotas de avisos
+

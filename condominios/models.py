@@ -220,3 +220,28 @@ class AdministradorGeral(models.Model):
 
     def __str__(self):
         return self.nome
+
+# ─────────────────────────────────────────────────────────────
+# 🔔 Modelo de Avisos e Comunicados
+# ─────────────────────────────────────────────────────────────
+class Aviso(models.Model):
+    titulo = models.CharField(max_length=150)  # Ex: "Reunião de condomínio"
+    mensagem = models.TextField()              # Conteúdo completo do aviso
+    criado_em = models.DateTimeField(auto_now_add=True)
+    expira_em = models.DateTimeField(null=True, blank=True)
+
+    condominio = models.ForeignKey(
+        Condominio,
+        on_delete=models.CASCADE,
+        help_text="Condomínio onde o aviso será exibido"
+    )
+
+    publicado_por = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        help_text="Usuário que publicou o aviso"
+    )
+
+    def __str__(self):
+        return f"{self.titulo} ({self.condominio.nome})"
