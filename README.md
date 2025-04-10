@@ -155,7 +155,7 @@ Testes cobrem:
 
 ## 👨‍💻 Autor
 
-Projeto desenvolvido por **Vitor Alves**  
+Projeto desenvolvido por **Vitor Alves**, **Caio Ferreira** e **Lucas Leal**  
 Visão de inovação, automação e experiência condominial com IA ⚙️
 
 ---
