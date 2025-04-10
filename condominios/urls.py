@@ -46,4 +46,8 @@ from .urls_avisos import urlpatterns as avisos_urls
 urlpatterns += avisos_urls  # Adiciona as rotas de avisos
 
 from .urls_manutencao import urlpatterns as manutencao_urls
-urlpatterns += manutencao_urls  # Adiciona as rotas de manutenções
+urlpatterns += manutencao_urls  # Adiciona as rotas de manutenções]
+
+from .urls_relatorios import urlpatterns as relatorios_urls
+urlpatterns += relatorios_urls
+
