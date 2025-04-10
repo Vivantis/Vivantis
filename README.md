@@ -118,11 +118,8 @@ vivantis/
 
 ## 🤝 Equipe
 
-Este projeto é desenvolvido por uma equipe dedicada à inovação em soluções para administração condominial:
+Este projeto é desenvolvido por uma equipe dedicada à inovação em soluções para administração condominial.
 
-Caio Ferreira
-Lucas Leal
-Vitor Alves
 
 ---
 
