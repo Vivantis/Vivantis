@@ -126,21 +126,22 @@ python manage.py runserver
 ---
 
 ## ✅ Módulos implementados
-Módulo	Status
-Condomínio	✅ Completo
-Unidade	✅ Completo
-Morador	✅ Completo
-Prestador	✅ Completo
-Ocorrência	✅ Completo
-Visitante	✅ Completo
-Controle de Acesso	✅ Completo
-Correspondência	✅ Completo
-Espaço Comum	✅ Completo
-Reserva de Espaços	✅ Completo
-Documentos	✅ Completo
-Administrador Geral	✅ Completo
-Avisos e Comunicados	✅ Completo
-Agenda de Manutenções	✅ Completo
+
+- ✅ Condomínio  
+- ✅ Unidade  
+- ✅ Morador  
+- ✅ Prestador  
+- ✅ Ocorrência  
+- ✅ Visitante  
+- ✅ Controle de Acesso  
+- ✅ Correspondência  
+- ✅ Espaço Comum  
+- ✅ Reserva de Espaços  
+- ✅ Documentos  
+- ✅ Administrador Geral  
+- ✅ Avisos e Comunicados  
+- ✅ Agenda de Manutenções  
+
 
 ---
 
@@ -167,7 +168,3 @@ Visão de inovação, automação e experiência condominial com IA ⚙️
 
 ---
 
-## 🤝 Contribuições
-
-Contribuições futuras são bem-vindas!  
-Abra uma issue ou envie um pull request ✨
