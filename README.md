@@ -162,8 +162,3 @@ Projeto desenvolvido por **Vitor Alves**, **Lucas Leal** e **Caio Ferreira**
 Visão de inovação, automação e experiência condominial com IA ⚙️
 
 ---
-
-## 🤝 Contribuições
-
-Contribuições futuras são bem-vindas!  
-Abra uma issue ou envie um pull request ✨
