@@ -20,7 +20,8 @@ Sistema inteligente e modular para gestão de condomínios, desenvolvido com Dja
 - Testes automatizados por módulo  
 - Agenda de Manutenções  
 - Avisos e Comunicados  
-- Administração Geral de Condomínios  
+- Administração Geral de Condomínios
+- Relatórios Gerais
 
 ---
 
