@@ -6,18 +6,19 @@ Este é um sistema inteligente para gestão de condomínios, com foco em melhora
 
 ## ✨ Funcionalidades
 
-- Cadastro de usuários (síndicos, moradores, porteiros, etc)
-- Gestão de chamados e ocorrências
-- Controle de acesso e agendamentos de áreas comuns
-- Registro inteligente de interações via IA
-- Dashboard para administração e relatórios
+- Cadastro de condomínios, unidades e moradores
+- Autenticação JWT segura para acesso à API
+- Endpoints RESTful protegidos
+- Documentação da API via Swagger e Redoc
+- Testes automatizados para garantir integridade do sistema
 - Integração com PostgreSQL
+- Pronto para expansão com módulos de controle de acesso, ocorrências, agendamentos, entre outros
 
 ---
 
 ## 🧠 Inteligência Artificial
 
-A IA será usada para:
+A IA será usada futuramente para:
 - Interpretar pedidos dos moradores
 - Sugerir ações automáticas com base no histórico
 - Ajudar a administração a priorizar demandas
@@ -26,17 +27,99 @@ A IA será usada para:
 
 ## 🛠 Tecnologias utilizadas
 
-- Django (Python)
+- Python 3.13 + Django
+- Django REST Framework
+- SimpleJWT (Autenticação)
+- drf-spectacular (Swagger)
 - PostgreSQL
-- HTML/CSS/JavaScript (frontend básico)
 - Git + GitHub
 
 ---
 
-## 📁 Como rodar o projeto localmente
+## 🚀 Como rodar o projeto localmente
 
 1. **Clone este repositório:**
 
 ```bash
 git clone https://github.com/viithalves/Vivantis.git
+cd Vivantis
+```
+
+2. **Crie um ambiente virtual e ative:**
+
+```bash
+python -m venv venv
+.\venv\Scripts\activate  # Windows
+```
+
+3. **Instale as dependências:**
+
+```bash
+pip install -r requirements.txt
+```
+
+4. **Configure o banco PostgreSQL no `settings.py`**
+
+5. **Rode as migrações e inicie o servidor:**
+
+```bash
+python manage.py migrate
+python manage.py runserver
+```
+
+6. **Acesse a documentação interativa:**
+
+- Swagger: `http://localhost:8000/api/docs/`
+- Redoc: `http://localhost:8000/api/redoc/`
+
+---
+
+## 🔐 Autenticação JWT
+
+1. Obtenha seu token via:
+
+```
+POST /api/token/
+```
+
+2. Use o token no Swagger clicando em **Authorize** e digitando:
+
+```
+Bearer seu_token_aqui
+```
+
+---
+
+## 🧪 Testes
+
+Execute:
+
+```bash
+python manage.py test
+```
+
+---
+
+## 📂 Organização do Projeto
+
+```
+vivantis/
+│
+├── core/                # Configurações gerais do Django
+├── condominios/         # App de condomínios, unidades e moradores
+├── staticfiles/         # Arquivos estáticos
+├── templates/           # (futuramente para frontend web)
+├── requirements.txt     # Pacotes e dependências do projeto
+├── README.md            # Documentação do projeto
+└── manage.py            # Script principal do Django
+```
+
+---
+
+## 🤝 Equipe
+
+Este projeto é desenvolvido por uma equipe dedicada à inovação em soluções para administração condominial.
+
+
+---
 
