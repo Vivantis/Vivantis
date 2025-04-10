@@ -140,7 +140,9 @@ python manage.py runserver
 - ✅ Documentos  
 - ✅ Administrador Geral  
 - ✅ Avisos e Comunicados  
-- ✅ Agenda de Manutenções  
+- ✅ Agenda de Manutenções
+- ✅ Relatórios Gerais
+  
 
 
 ---
