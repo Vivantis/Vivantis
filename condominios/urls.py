@@ -38,3 +38,6 @@ urlpatterns += reservas_urls  # Adiciona as rotas de espaços e reservas
 
 from .urls_documentos import urlpatterns as documentos_urls
 urlpatterns += documentos_urls  # Adiciona as rotas de documentos
+
+from .urls_administradores import urlpatterns as administradores_urls
+urlpatterns += administradores_urls  # Adiciona as rotas de administradores gerais

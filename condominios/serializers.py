@@ -10,7 +10,8 @@ from .models import (
     Correspondencia,
     ReservaEspaco,
     EspacoComum,
-    Documento
+    Documento,
+    AdministradorGeral
 )
 
 # ─────────────────────────────────────────────────────────────
@@ -110,3 +111,13 @@ class DocumentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Documento
         fields = '__all__'  # Inclui todos os campos do modelo Documento
+
+
+
+# ─────────────────────────────────────────────────────────────
+# Serializer para o modelo Administrador Geral
+# ─────────────────────────────────────────────────────────────
+class AdministradorGeralSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdministradorGeral
+        fields = '__all__'  # Inclui user, nome, telefone, etc.
