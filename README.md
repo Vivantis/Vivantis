@@ -6,40 +6,43 @@ Sistema inteligente e modular para gestão de condomínios, desenvolvido com Dja
 
 ## ✨ Funcionalidades atuais
 
-- Cadastro de condomínios e suas unidades
-- Registro de moradores com vínculo à unidade
-- Gestão de prestadores de serviço
-- Registro de visitantes e controle de entrada
-- Controle de acesso (entrada e saída)
-- Ocorrências (problemas, solicitações)
-- Correspondências (entregas e retiradas)
-- Espaços comuns e reservas por moradores
-- Compartilhamento de documentos (regulamentos, boletos, atas)
-- Autenticação JWT protegendo toda a API
-- Documentação Swagger interativa
-- Testes automatizados por módulo
+- Cadastro de condomínios e suas unidades  
+- Registro de moradores com vínculo à unidade  
+- Gestão de prestadores de serviço  
+- Registro de visitantes e controle de entrada  
+- Controle de acesso (entrada e saída)  
+- Ocorrências (problemas, solicitações)  
+- Correspondências (entregas e retiradas)  
+- Espaços comuns e reservas por moradores  
+- Compartilhamento de documentos (regulamentos, boletos, atas)  
+- Autenticação JWT protegendo toda a API  
+- Documentação Swagger interativa  
+- Testes automatizados por módulo  
+- Agenda de Manutenções  
+- Avisos e Comunicados  
+- Administração Geral de Condomínios  
 
 ---
 
 ## 🧠 IA e recursos futuros
 
-- Classificação inteligente de ocorrências por urgência
-- Geração de relatórios e dashboards
-- Análise de ocupação de espaços
-- Previsão de fluxo de visitantes
-- Alertas proativos para gestão
+- Classificação inteligente de ocorrências por urgência  
+- Geração de relatórios e dashboards  
+- Análise de ocupação de espaços  
+- Previsão de fluxo de visitantes  
+- Alertas proativos para gestão  
 
 ---
 
 ## 🛠 Tecnologias utilizadas
 
-- Python 3.13
-- Django 5.x
-- Django REST Framework
-- PostgreSQL
-- SimpleJWT (autenticação)
-- drf-spectacular (Swagger)
-- Git e GitHub
+- Python 3.13  
+- Django 5.x  
+- Django REST Framework  
+- PostgreSQL  
+- SimpleJWT (autenticação)  
+- drf-spectacular (Swagger)  
+- Git e GitHub  
 
 ---
 
@@ -123,20 +126,21 @@ python manage.py runserver
 ---
 
 ## ✅ Módulos implementados
-
-| Módulo               | Status     |
-|----------------------|------------|
-| Condomínio           | ✅ Completo |
-| Unidade              | ✅ Completo |
-| Morador              | ✅ Completo |
-| Prestador            | ✅ Completo |
-| Ocorrência           | ✅ Completo |
-| Visitante            | ✅ Completo |
-| Controle de Acesso   | ✅ Completo |
-| Correspondência      | ✅ Completo |
-| Espaço Comum         | ✅ Completo |
-| Reserva de Espaços   | ✅ Completo |
-| Documentos           | ✅ Completo |
+Módulo	Status
+Condomínio	✅ Completo
+Unidade	✅ Completo
+Morador	✅ Completo
+Prestador	✅ Completo
+Ocorrência	✅ Completo
+Visitante	✅ Completo
+Controle de Acesso	✅ Completo
+Correspondência	✅ Completo
+Espaço Comum	✅ Completo
+Reserva de Espaços	✅ Completo
+Documentos	✅ Completo
+Administrador Geral	✅ Completo
+Avisos e Comunicados	✅ Completo
+Agenda de Manutenções	✅ Completo
 
 ---
 
@@ -162,3 +166,8 @@ Projeto desenvolvido por **Vitor Alves**, **Lucas Leal** e **Caio Ferreira**
 Visão de inovação, automação e experiência condominial com IA ⚙️
 
 ---
+
+## 🤝 Contribuições
+
+Contribuições futuras são bem-vindas!  
+Abra uma issue ou envie um pull request ✨
