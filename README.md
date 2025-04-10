@@ -6,40 +6,37 @@ Este é um sistema inteligente para gestão de condomínios, com foco em melhora
 
 ## ✨ Funcionalidades
 
-- Cadastro de usuários (síndicos, moradores, porteiros, etc)
-- Gestão de chamados e ocorrências
-- Controle de acesso e agendamentos de áreas comuns
-- Registro inteligente de interações via IA
-- Dashboard para administração e relatórios
+- Cadastro de condomínios, unidades e moradores
+- Autenticação JWT segura para acesso à API
+- Endpoints RESTful protegidos
+- Documentação da API via Swagger e Redoc
+- Testes automatizados para garantir integridade do sistema
 - Integração com PostgreSQL
-- API REST protegida com autenticação JWT
-- Documentação interativa com Swagger
+- Pronto para expansão com módulos de controle de acesso, ocorrências, agendamentos, entre outros
 
 ---
 
 ## 🧠 Inteligência Artificial
 
-A IA será usada para:
+A IA será usada futuramente para:
 - Interpretar pedidos dos moradores
 - Sugerir ações automáticas com base no histórico
 - Ajudar a administração a priorizar demandas
-- Automatizar respostas e interações do sistema
 
 ---
 
 ## 🛠 Tecnologias utilizadas
 
-- Python 3.x
-- Django 5+
+- Python 3.13 + Django
 - Django REST Framework
+- SimpleJWT (Autenticação)
+- drf-spectacular (Swagger)
 - PostgreSQL
-- Simple JWT (Autenticação com Token)
-- drf-spectacular (Documentação Swagger)
 - Git + GitHub
 
 ---
 
-## ⚙️ Como rodar o projeto localmente
+## 🚀 Como rodar o projeto localmente
 
 1. **Clone este repositório:**
 
@@ -48,105 +45,84 @@ git clone https://github.com/viithalves/Vivantis.git
 cd Vivantis
 ```
 
-2. **Crie um ambiente virtual:**
+2. **Crie um ambiente virtual e ative:**
 
 ```bash
 python -m venv venv
+.\venv\Scripts\activate  # Windows
 ```
 
-3. **Ative o ambiente virtual:**
-
-- Windows:
-
-```bash
-.\venv\Scripts\activate
-```
-
-- Mac/Linux:
-
-```bash
-source venv/bin/activate
-```
-
-4. **Instale as dependências:**
+3. **Instale as dependências:**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-5. **Configure o banco PostgreSQL no `settings.py`**
+4. **Configure o banco PostgreSQL no `settings.py`**
 
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'seu_banco',
-        'USER': 'seu_usuario',
-        'PASSWORD': 'sua_senha',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-```
-
-6. **Execute as migrações:**
+5. **Rode as migrações e inicie o servidor:**
 
 ```bash
-python manage.py makemigrations
 python manage.py migrate
-```
-
-7. **Crie um superusuário:**
-
-```bash
-python manage.py createsuperuser
-```
-
-8. **Rode o servidor:**
-
-```bash
 python manage.py runserver
 ```
 
+6. **Acesse a documentação interativa:**
+
+- Swagger: `http://localhost:8000/api/docs/`
+- Redoc: `http://localhost:8000/api/redoc/`
+
 ---
 
-## 🔐 Autenticação com JWT
+## 🔐 Autenticação JWT
 
-Para obter o token de acesso e autenticar:
+1. Obtenha seu token via:
 
-- Endpoint: `POST /api/token/`
-- Enviar: `username` e `password`
-- Recebe: `access` e `refresh` tokens
-- Use o `access` em endpoints protegidos com o header:
+```
+POST /api/token/
+```
 
-```http
-Authorization: Bearer seu_token
+2. Use o token no Swagger clicando em **Authorize** e digitando:
+
+```
+Bearer seu_token_aqui
 ```
 
 ---
 
-## 📑 Documentação Swagger
+## 🧪 Testes
 
-Acesse a documentação interativa em:
+Execute:
 
-```
-http://localhost:8000/api/docs/
+```bash
+python manage.py test
 ```
 
 ---
 
-## 🤝 Colaboração
+## 📂 Organização do Projeto
 
-Caso queira contribuir:
-
-- Fork o repositório
-- Crie uma branch: `git checkout -b sua-feature`
-- Commit suas mudanças: `git commit -m 'Minha contribuição'`
-- Push: `git push origin sua-feature`
-- Crie um Pull Request
+```
+vivantis/
+│
+├── core/                # Configurações gerais do Django
+├── condominios/         # App de condomínios, unidades e moradores
+├── staticfiles/         # Arquivos estáticos
+├── templates/           # (futuramente para frontend web)
+├── requirements.txt     # Pacotes e dependências do projeto
+├── README.md            # Documentação do projeto
+└── manage.py            # Script principal do Django
+```
 
 ---
 
-## 📄 Licença
+## 🤝 Equipe
 
-Este projeto está sob a licença MIT.
+Este projeto é desenvolvido por uma equipe dedicada à inovação em soluções para administração condominial:
+
+Caio Ferreira
+Lucas Leal
+Vitor Alves
+
+---
+
