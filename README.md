@@ -144,6 +144,7 @@ python manage.py runserver
 - ✅ Agenda de Manutenções
 - ✅ Relatórios Gerais
 - ✅ Cobranças Financeiras
+- ✅ Comprovantes de Pagamento
 
   
 
