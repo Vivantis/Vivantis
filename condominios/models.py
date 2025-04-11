@@ -299,3 +299,27 @@ class Cobranca(models.Model):
 
     def __str__(self):
         return f"{self.unidade} - R$ {self.valor} - {self.get_status_display()}"
+
+
+# ─────────────────────────────────────────────────────────────
+# 📎 Modelo de Comprovante de Pagamento
+# ─────────────────────────────────────────────────────────────
+class ComprovantePagamento(models.Model):
+    cobranca = models.ForeignKey('Cobranca', on_delete=models.CASCADE)  # Referência à cobrança
+    morador = models.ForeignKey('Morador', on_delete=models.CASCADE)    # Morador que enviou o comprovante
+    arquivo = models.FileField(upload_to='comprovantes/')               # Arquivo enviado (imagem/PDF)
+    comentario = models.TextField(blank=True)                           # Comentário opcional
+    data_envio = models.DateTimeField(auto_now_add=True)                # Registrado automaticamente
+
+    validado = models.BooleanField(default=False)                       # Marcado como validado ou não
+    validado_por = models.ForeignKey(                                   
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='comprovantes_validados',
+        help_text="Usuário que validou o comprovante"
+    )
+
+    def __str__(self):
+        return f"Comprovante de {self.morador.nome} para {self.cobranca}"

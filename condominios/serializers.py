@@ -14,7 +14,8 @@ from .models import (
     AdministradorGeral,
     Aviso,
     Manutencao,
-    Cobranca
+    Cobranca,
+    ComprovantePagamento
 )
 
 # ─────────────────────────────────────────────────────────────
@@ -147,4 +148,11 @@ class ManutencaoSerializer(serializers.ModelSerializer):
 class CobrancaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cobranca
+        fields = '__all__'
+
+# Serializer para o modelo ComprovantePagamento
+# Responsável por converter os dados entre JSON e modelo
+class ComprovantePagamentoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComprovantePagamento
         fields = '__all__'
