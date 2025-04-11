@@ -2,7 +2,8 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils import timezone
-from .models import Condominio, Unidade, Morador, Cobranca
+from .models import Condominio, Unidade, Morador, Cobranca, AdministradorGeral
+
 
 class CobrancaAPITests(APITestCase):
     """
@@ -10,8 +11,9 @@ class CobrancaAPITests(APITestCase):
     """
 
     def setUp(self):
-        # Cria usuário e autentica com JWT
+        # Cria usuário com perfil de AdministradorGeral
         self.user = User.objects.create_user(username='admin', password='admin123')
+        self.admin_profile = AdministradorGeral.objects.create(user=self.user, nome='Admin Teste', telefone='(11) 91111-2222')
         self.client.force_authenticate(user=self.user)
 
         # Cria estrutura de dados base

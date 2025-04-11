@@ -5,6 +5,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 from .models import Condominio, Unidade, Morador, Cobranca, ComprovantePagamento
 
+
 class ComprovantePagamentoAPITests(APITestCase):
     """
     Testes automatizados para o endpoint de comprovantes de pagamento.
@@ -18,7 +19,8 @@ class ComprovantePagamentoAPITests(APITestCase):
         # Cria dados relacionados
         self.condominio = Condominio.objects.create(nome="Residencial Teste", endereco="Rua A, 123")
         self.unidade = Unidade.objects.create(numero="101", bloco="A", condominio=self.condominio)
-        self.morador = Morador.objects.create(nome="João", email="joao@email.com", unidade=self.unidade)
+        self.morador = Morador.objects.create(user=self.user, nome="João", email="joao@email.com", unidade=self.unidade)
+
         self.cobranca = Cobranca.objects.create(
             unidade=self.unidade,
             morador=self.morador,

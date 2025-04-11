@@ -2,7 +2,11 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils import timezone
-from .models import Condominio, Morador, Ocorrencia, Visitante, Unidade, EspacoComum, ReservaEspaco
+from .models import (
+    Condominio, Morador, Ocorrencia, Visitante, Unidade,
+    EspacoComum, ReservaEspaco, AdministradorGeral
+)
+
 
 class RelatorioGeralAPITests(APITestCase):
     """
@@ -13,6 +17,9 @@ class RelatorioGeralAPITests(APITestCase):
         # Cria e autentica usuário
         self.user = User.objects.create_user(username='admin', password='admin123')
         self.client.force_authenticate(user=self.user)
+
+        # Torna o usuário um administrador geral
+        self.admin = AdministradorGeral.objects.create(user=self.user, nome="Admin Teste", telefone="(11) 90000-0000")
 
         # Cria dados simulados para o relatório
         self.condominio = Condominio.objects.create(nome="Condomínio Teste", endereco="Rua Exemplo, 123")

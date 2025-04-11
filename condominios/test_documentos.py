@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .models import Condominio, Documento
+from .models import Condominio, Documento, AdministradorGeral
 
 
 class DocumentoAPITests(APITestCase):
@@ -14,6 +14,9 @@ class DocumentoAPITests(APITestCase):
         # Cria e autentica um usuário
         self.user = User.objects.create_user(username='sindico', password='admin123')
         self.client.force_authenticate(user=self.user)
+
+        # Torna o usuário um administrador geral
+        self.admin = AdministradorGeral.objects.create(user=self.user, nome='Síndico', telefone='(11) 90000-0000')
 
         # Cria um condomínio base
         self.condominio = Condominio.objects.create(

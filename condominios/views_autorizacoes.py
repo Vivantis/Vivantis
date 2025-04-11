@@ -1,21 +1,27 @@
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from django.utils import timezone
+# condominios/views_autorizacoes.py
 
+from rest_framework import viewsets, status, serializers
+from rest_framework.response import Response
 from .models import AutorizacaoEntrada, Morador
 from .serializers import AutorizacaoEntradaSerializer
-from .utils_auditoria import registrar_acao  # 👈 Importa a função de auditoria
+from .utils_auditoria import registrar_acao
+from .permissions import get_viewset_permissions  # 🔐 Importa permissões dinâmicas
+from django.utils import timezone
 
+# ViewSet para o modelo Autorização de Entrada
+# Usado para aprovar/recusar visitas remotamente por moradores
 class AutorizacaoEntradaViewSet(viewsets.ModelViewSet):
     queryset = AutorizacaoEntrada.objects.all()
     serializer_class = AutorizacaoEntradaSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = get_viewset_permissions('AutorizacaoEntradaViewSet')
 
     def perform_create(self, serializer):
+        """
+        Ao criar, registra quem criou e salva auditoria.
+        """
         instancia = serializer.save(criado_por=self.request.user)
 
-        # 📝 Registra criação na auditoria
+        # 📝 Registro de criação na auditoria
         registrar_acao(
             usuario=self.request.user,
             tipo_acao='criado',
@@ -25,9 +31,12 @@ class AutorizacaoEntradaViewSet(viewsets.ModelViewSet):
         )
 
     def perform_update(self, serializer):
+        """
+        Ao atualizar, registra quem respondeu, quando e salva na auditoria.
+        Bloqueia alteração se a solicitação já foi respondida.
+        """
         instancia = serializer.instance
 
-        # Bloqueia alterações após resposta
         if instancia.status != 'pendente':
             raise serializers.ValidationError("Essa solicitação já foi respondida.")
 
@@ -38,7 +47,7 @@ class AutorizacaoEntradaViewSet(viewsets.ModelViewSet):
             respondido_em=timezone.now()
         )
 
-        # 📝 Registra atualização na auditoria
+        # 📝 Registro de edição na auditoria
         registrar_acao(
             usuario=self.request.user,
             tipo_acao='editado',
@@ -48,7 +57,9 @@ class AutorizacaoEntradaViewSet(viewsets.ModelViewSet):
         )
 
     def _morador_logado(self):
-        from .models import Morador
+        """
+        Busca o morador logado com base no e-mail do usuário autenticado.
+        """
         try:
             return Morador.objects.get(email=self.request.user.email)
         except Morador.DoesNotExist:

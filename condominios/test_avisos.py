@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from .models import Condominio, Aviso
+from .models import Condominio, Aviso, AdministradorGeral
 
 
 class AvisoAPITests(APITestCase):
@@ -10,8 +10,9 @@ class AvisoAPITests(APITestCase):
     """
 
     def setUp(self):
-        # Cria e autentica um usuário (síndico)
+        # Cria e autentica um usuário com perfil de AdministradorGeral (síndico)
         self.user = User.objects.create_user(username='sindico', password='admin123')
+        self.admin_profile = AdministradorGeral.objects.create(user=self.user, nome='Síndico', telefone='(11) 98888-0000')
         self.client.force_authenticate(user=self.user)
 
         # Cria um condomínio base

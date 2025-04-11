@@ -10,8 +10,8 @@ class ReservaEspacoAPITests(APITestCase):
     """
 
     def setUp(self):
-        # Cria e autentica um usuário
-        self.user = User.objects.create_user(username='admin', password='admin123')
+        # Cria o usuário e associa ao morador pelo email (usado na permissão IsMoradorDono)
+        self.user = User.objects.create_user(username='moradora', email='julia@example.com', password='admin123')
         self.client.force_authenticate(user=self.user)
 
         # Dados de base para o teste

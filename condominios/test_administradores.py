@@ -10,11 +10,12 @@ class AdministradorGeralAPITests(APITestCase):
     """
 
     def setUp(self):
-        # Cria e autentica um usuário comum (que será um administrador geral)
+        # Cria o usuário e associa ao modelo AdministradorGeral para garantir permissão
         self.user = User.objects.create_user(username='admin_geral', password='admin123')
+        self.admin_profile = AdministradorGeral.objects.create(user=self.user, nome='Admin', telefone='(11) 90000-0000')
         self.client.force_authenticate(user=self.user)
 
-        # Dados padrão para criação de administrador geral
+        # Dados padrão para criação de novo administrador
         self.dados = {
             "user": self.user.id,
             "nome": "Gestor Regional",
@@ -52,4 +53,3 @@ class AdministradorGeralAPITests(APITestCase):
         response = self.client.delete(f'/api/administradores/{adm.id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(AdministradorGeral.objects.filter(id=adm.id).exists())
-
