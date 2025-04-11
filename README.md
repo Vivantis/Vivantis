@@ -143,6 +143,8 @@ python manage.py runserver
 - ✅ Avisos e Comunicados  
 - ✅ Agenda de Manutenções
 - ✅ Relatórios Gerais
+- ✅ Cobranças Financeiras
+
   
 
 
