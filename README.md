@@ -145,6 +145,7 @@ python manage.py runserver
 - ✅ Relatórios Gerais
 - ✅ Cobranças Financeiras
 - ✅ Comprovantes de Pagamento
+- ✅ Autorização de Entrada Remota 
 
   
 
