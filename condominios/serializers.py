@@ -17,7 +17,8 @@ from .models import (
     Cobranca,
     ComprovantePagamento,
     AutorizacaoEntrada,
-    Auditoria
+    Auditoria,
+    PerfilUsuario
 )
 
 # ─────────────────────────────────────────────────────────────
@@ -174,3 +175,12 @@ class AuditoriaSerializer(serializers.ModelSerializer):
         model = Auditoria
         fields = '__all__'
         read_only_fields = ['usuario', 'data']  # Nenhum campo é editável manualmente
+
+    # 🔄 Serializer para o perfil do usuário
+class PerfilUsuarioSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    email = serializers.EmailField(source='user.email', read_only=True)
+
+    class Meta:
+        model = PerfilUsuario
+        fields = ['id', 'username', 'email', 'telefone', 'foto', 'bio']

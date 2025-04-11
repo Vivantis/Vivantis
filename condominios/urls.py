@@ -63,4 +63,7 @@ urlpatterns += autorizacoes_urls
 from .urls_auditoria import urlpatterns as auditoria_urls
 urlpatterns += auditoria_urls
 
+from .urls_perfil import urlpatterns as perfil_urls
+urlpatterns += perfil_urls
+
 
