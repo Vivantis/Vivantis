@@ -373,3 +373,31 @@ class AutorizacaoEntrada(models.Model):
 
     def __str__(self):
         return f"{self.nome_visitante} para {self.unidade_destino} - {self.get_status_display()}"
+
+# ─────────────────────────────────────────────────────────────
+# 📋 Modelo de Auditoria de Ações
+# ─────────────────────────────────────────────────────────────
+class Auditoria(models.Model):
+    ACOES = [
+        ('criado', 'Criado'),
+        ('editado', 'Editado'),
+        ('excluido', 'Excluído'),
+    ]
+
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text="Usuário que realizou a ação"
+    )
+
+    tipo_acao = models.CharField(max_length=20, choices=ACOES)
+    entidade = models.CharField(max_length=100)        # Nome do modelo (ex: 'Ocorrencia')
+    objeto_id = models.PositiveIntegerField()          # ID do registro afetado
+    descricao = models.TextField()                     # Descrição livre da ação realizada
+    data = models.DateTimeField(auto_now_add=True)     # Data da ação
+
+    def __str__(self):
+        return f"{self.entidade} #{self.objeto_id} - {self.get_tipo_acao_display()}"
+

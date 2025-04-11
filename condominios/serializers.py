@@ -16,7 +16,8 @@ from .models import (
     Manutencao,
     Cobranca,
     ComprovantePagamento,
-    AutorizacaoEntrada
+    AutorizacaoEntrada,
+    Auditoria
 )
 
 # ─────────────────────────────────────────────────────────────
@@ -164,3 +165,12 @@ class AutorizacaoEntradaSerializer(serializers.ModelSerializer):
         model = AutorizacaoEntrada
         fields = '__all__'  # Inclui todos os campos do modelo
         read_only_fields = ['criado_em', 'respondido_em', 'respondido_por', 'criado_por']
+
+
+class AuditoriaSerializer(serializers.ModelSerializer):
+    usuario = serializers.StringRelatedField()  # Mostra o nome do usuário
+
+    class Meta:
+        model = Auditoria
+        fields = '__all__'
+        read_only_fields = ['usuario', 'data']  # Nenhum campo é editável manualmente

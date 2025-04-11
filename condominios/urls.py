@@ -60,4 +60,7 @@ urlpatterns += comprovantes_urls
 from .urls_autorizacoes import urlpatterns as autorizacoes_urls
 urlpatterns += autorizacoes_urls
 
+from .urls_auditoria import urlpatterns as auditoria_urls
+urlpatterns += auditoria_urls
+
 
