@@ -128,25 +128,27 @@ python manage.py runserver
 
 ## ✅ Módulos implementados
 
-- ✅ Condomínio
-- ✅ Unidade
-- ✅ Morador
-- ✅ Prestador
-- ✅ Ocorrência
-- ✅ Visitante
-- ✅ Controle de Acesso
-- ✅ Correspondência
-- ✅ Espaço Comum
-- ✅ Reserva de Espaços
-- ✅ Documentos
-- ✅ Administrador Geral
-- ✅ Avisos e Comunicados
-- ✅ Agenda de Manutenções
-- ✅ Relatórios Gerais
-- ✅ Cobranças Financeiras
-- ✅ Comprovantes de Pagamento
-- ✅ Autorizações de Entrada
-- ✅ Auditoria de Ações (histórico de alterações)
+- ✅ Condomínio  
+- ✅ Unidade  
+- ✅ Morador  
+- ✅ Prestador  
+- ✅ Ocorrência  
+- ✅ Visitante  
+- ✅ Controle de Acesso  
+- ✅ Correspondência  
+- ✅ Espaço Comum  
+- ✅ Reserva de Espaços  
+- ✅ Documentos  
+- ✅ Administrador Geral  
+- ✅ Avisos e Comunicados  
+- ✅ Agenda de Manutenções  
+- ✅ Relatórios Gerais  
+- ✅ Cobranças Financeiras  
+- ✅ Comprovantes de Pagamento  
+- ✅ Autorizações de Entrada  
+- ✅ Auditoria de Ações  
+- ✅ Perfil de Usuário (dados pessoais com autenticação)  
+
 
 
   
