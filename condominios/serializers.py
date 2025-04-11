@@ -13,7 +13,8 @@ from .models import (
     Documento,
     AdministradorGeral,
     Aviso,
-    Manutencao
+    Manutencao,
+    Cobranca
 )
 
 # ─────────────────────────────────────────────────────────────
@@ -140,3 +141,10 @@ class ManutencaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manutencao
         fields = '__all__'  # Inclui todos os campos do modelo Manutencao 
+
+# Serializer para o modelo de cobrança
+# Converte os dados de cobrança entre JSON e modelo
+class CobrancaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cobranca
+        fields = '__all__'

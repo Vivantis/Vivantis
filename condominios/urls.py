@@ -51,3 +51,6 @@ urlpatterns += manutencao_urls  # Adiciona as rotas de manutenções]
 from .urls_relatorios import urlpatterns as relatorios_urls
 urlpatterns += relatorios_urls
 
+from .urls_cobrancas import urlpatterns as cobrancas_urls
+urlpatterns += cobrancas_urls
+
