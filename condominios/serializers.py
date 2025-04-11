@@ -15,7 +15,8 @@ from .models import (
     Aviso,
     Manutencao,
     Cobranca,
-    ComprovantePagamento
+    ComprovantePagamento,
+    AutorizacaoEntrada
 )
 
 # ─────────────────────────────────────────────────────────────
@@ -156,3 +157,10 @@ class ComprovantePagamentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComprovantePagamento
         fields = '__all__'
+
+
+class AutorizacaoEntradaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AutorizacaoEntrada
+        fields = '__all__'  # Inclui todos os campos do modelo
+        read_only_fields = ['criado_em', 'respondido_em', 'respondido_por', 'criado_por']

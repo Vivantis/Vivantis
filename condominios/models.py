@@ -323,3 +323,53 @@ class ComprovantePagamento(models.Model):
 
     def __str__(self):
         return f"Comprovante de {self.morador.nome} para {self.cobranca}"
+
+# ─────────────────────────────────────────────────────────────
+# ✅ Modelo de Autorização de Entrada Remota
+# ─────────────────────────────────────────────────────────────
+class AutorizacaoEntrada(models.Model):
+    STATUS_CHOICES = [
+        ('pendente', 'Pendente'),
+        ('aprovada', 'Aprovada'),
+        ('recusada', 'Recusada'),
+    ]
+
+    nome_visitante = models.CharField(max_length=100)  # Nome do visitante
+    documento_visitante = models.CharField(max_length=50)  # RG, CPF, etc.
+
+    unidade_destino = models.ForeignKey(
+        Unidade,
+        on_delete=models.CASCADE,
+        help_text="Unidade que o visitante quer acessar"
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pendente',
+        help_text="Status da autorização"
+    )
+
+    criado_em = models.DateTimeField(auto_now_add=True)  # Quando a solicitação foi registrada
+    respondido_em = models.DateTimeField(null=True, blank=True)  # Quando foi respondida
+
+    respondido_por = models.ForeignKey(
+        Morador,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text="Morador que autorizou ou recusou"
+    )
+
+    criado_por = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text="Usuário da portaria que registrou a solicitação"
+    )
+
+    observacoes = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.nome_visitante} para {self.unidade_destino} - {self.get_status_display()}"

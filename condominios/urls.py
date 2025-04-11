@@ -57,4 +57,7 @@ urlpatterns += cobrancas_urls
 from .urls_comprovantes import urlpatterns as comprovantes_urls
 urlpatterns += comprovantes_urls
 
+from .urls_autorizacoes import urlpatterns as autorizacoes_urls
+urlpatterns += autorizacoes_urls
+
 
