@@ -3,7 +3,7 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
-from .models import Condominio, Unidade, Morador, Cobranca, ComprovantePagamento
+from condominios.models import Condominio, Unidade, Morador, Cobranca, ComprovantePagamento
 
 
 class ComprovantePagamentoAPITests(APITestCase):
@@ -19,7 +19,7 @@ class ComprovantePagamentoAPITests(APITestCase):
         # Cria dados relacionados
         self.condominio = Condominio.objects.create(nome="Residencial Teste", endereco="Rua A, 123")
         self.unidade = Unidade.objects.create(numero="101", bloco="A", condominio=self.condominio)
-        self.morador = Morador.objects.create(user=self.user, nome="João", email="joao@email.com", unidade=self.unidade)
+        self.morador = Morador.objects.create(nome="João", email="joao@email.com", unidade=self.unidade)
 
         self.cobranca = Cobranca.objects.create(
             unidade=self.unidade,
@@ -70,7 +70,6 @@ class ComprovantePagamentoAPITests(APITestCase):
             comentario="Inicial"
         )
 
-        # Atualiza apenas campos que não incluem o arquivo (que já foi enviado)
         novos_dados = {
             "comentario": "Atualizado",
             "validado": True,
@@ -93,3 +92,32 @@ class ComprovantePagamentoAPITests(APITestCase):
         response = self.client.delete(f'/api/comprovantes/{comprovante.id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(ComprovantePagamento.objects.filter(id=comprovante.id).exists())
+
+def test_filtrar_comprovantes_por_morador(self):
+    """Testa filtro de comprovantes por morador"""
+    # Cria um segundo morador
+    outro_morador = Morador.objects.create(nome="Maria", email="maria@email.com", unidade=self.unidade)
+
+    # Comprovante de Maria
+    ComprovantePagamento.objects.create(
+        cobranca=self.cobranca,
+        morador=outro_morador,
+        arquivo=self.arquivo,
+        comentario="Comprovante de Maria"
+    )
+
+    # Comprovante de João (self.morador)
+    ComprovantePagamento.objects.create(
+        cobranca=self.cobranca,
+        morador=self.morador,
+        arquivo=self.arquivo,
+        comentario="Comprovante do João"
+    )
+
+    # Aplica o filtro por morador
+    url = f'/api/comprovantes/?morador={self.morador.id}'
+    response = self.client.get(url)
+
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    self.assertEqual(len(response.data), 1)
+    self.assertEqual(response.data[0]['morador'], self.morador.id)

@@ -1,14 +1,29 @@
-# condominios/views_comprovantes.py
+from rest_framework import viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
+from condominios.models import ComprovantePagamento
+from condominios.serializers import ComprovantePagamentoSerializer
 
-from rest_framework import viewsets
-from .models import ComprovantePagamento
-from .serializers import ComprovantePagamentoSerializer
-from .permissions import get_viewset_permissions
-
-# ViewSet para Comprovantes de Pagamento
-# Permite enviar, listar e validar comprovantes
-# Apenas moradores donos ou administradores têm acesso ao seu conteúdo
 class ComprovantePagamentoViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gerenciamento de Comprovantes de Pagamento.
+    Permite listar, criar, editar e excluir comprovantes.
+    Inclui filtros, busca e ordenação.
+    """
     queryset = ComprovantePagamento.objects.all()
     serializer_class = ComprovantePagamentoSerializer
-    permission_classes = get_viewset_permissions('ComprovantePagamentoViewSet')
+
+    # Ativa filtros, ordenação e busca
+    filter_backends = [
+        DjangoFilterBackend,  # permite filtro direto na URL (ex: ?morador=1)
+        filters.OrderingFilter,  # permite ordenação (ex: ?ordering=-data_envio)
+        filters.SearchFilter  # permite busca textual (ex: ?search=pagamento)
+    ]
+
+    # Campos que podem ser filtrados via query string
+    filterset_fields = ['morador', 'cobranca', 'validado']
+
+    # Campos permitidos para ordenação
+    ordering_fields = ['data_envio', 'comentario']
+
+    # Campos onde a busca textual será aplicada
+    search_fields = ['comentario']

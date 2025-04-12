@@ -42,8 +42,3 @@ urlpatterns += [
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),  # Swagger UI
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),         # Redoc
 ]
-from rest_framework.documentation import include_docs_urls
-
-urlpatterns += [
-    path('docs/', include_docs_urls(title='Vivantis API')),
-]
