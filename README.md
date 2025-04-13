@@ -170,6 +170,7 @@ python manage.py test
 ```
 
 🧠 Visão futura com IA
+
 🔎 Classificação automática de ocorrências
 
 📊 Dashboards inteligentes com indicadores por condomínio
