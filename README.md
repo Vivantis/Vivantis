@@ -1,49 +1,58 @@
 # 🏢 Vivantis – Sistema de Gestão de Condomínio com IA
 
-Sistema inteligente e modular para gestão de condomínios, desenvolvido com Django, PostgreSQL, JWT e Swagger. Permite automação de processos, registro de dados, segurança de acesso e experiências futuras com inteligência artificial.
+Sistema modular, robusto e inteligente desenvolvido com Django + PostgreSQL para facilitar a gestão de condomínios residenciais. O Vivantis une **tecnologia, automação e segurança** em uma só plataforma, com visão futura de integração com inteligência artificial.
 
 ---
 
-## ✨ Funcionalidades atuais
+## 🚀 Funcionalidades principais
 
-- Cadastro de condomínios e suas unidades  
-- Registro de moradores com vínculo à unidade  
-- Gestão de prestadores de serviço  
-- Registro de visitantes e controle de entrada  
-- Controle de acesso (entrada e saída)  
-- Ocorrências (problemas, solicitações)  
-- Correspondências (entregas e retiradas)  
-- Espaços comuns e reservas por moradores  
-- Compartilhamento de documentos (regulamentos, boletos, atas)  
-- Autenticação JWT protegendo toda a API  
-- Documentação Swagger interativa  
-- Testes automatizados por módulo  
-- Agenda de Manutenções  
-- Avisos e Comunicados  
-- Administração Geral de Condomínios
-- Relatórios Gerais
-
----
-
-## 🧠 IA e recursos futuros
-
-- Classificação inteligente de ocorrências por urgência  
-- Geração de relatórios e dashboards  
-- Análise de ocupação de espaços  
-- Previsão de fluxo de visitantes  
-- Alertas proativos para gestão  
+- ✅ Cadastro e gerenciamento de **condomínios** e **unidades**
+- 👤 Registro de **moradores**, com vínculo à unidade
+- 💼 Gestão de **prestadores de serviço**
+- 🧾 Controle de **comprovantes de pagamento**
+- 📮 **Correspondências** recebidas e retiradas
+- 📅 **Reserva de espaços comuns** com controle de status
+- 🛠️ **Manutenções** planejadas e acompanhamentos
+- 🔐 **Controle de acesso** para moradores, visitantes e prestadores
+- 👀 Registro e acompanhamento de **ocorrências**
+- 📎 Upload e gestão de **documentos internos** (regulamentos, atas, boletos, etc)
+- 📢 Publicação de **avisos/comunicados**
+- 🧠 Sistema preparado para integração futura com IA (dashboards, previsões e alertas)
+- 🔐 **Autenticação via JWT**
+- 🧪 **Testes automatizados por módulo**
+- 📘 Documentação interativa via Swagger e Redoc
 
 ---
 
-## 🛠 Tecnologias utilizadas
+## 🔍 Funcionalidades recentes
 
-- Python 3.13  
-- Django 5.x  
-- Django REST Framework  
-- PostgreSQL  
-- SimpleJWT (autenticação)  
-- drf-spectacular (Swagger)  
-- Git e GitHub  
+🆕 **Filtragem inteligente nas APIs de:**
+
+- **Comprovantes de Pagamento**
+  - Por morador
+  - Por cobrança
+  - Por status de validação
+
+- **Moradores**
+  - Por nome
+  - Por e-mail
+  - Por unidade
+
+✨ Essas funcionalidades foram totalmente testadas com **testes automatizados**, garantindo estabilidade para uso em produção e integração com o front-end.
+
+---
+
+## 🛠️ Tecnologias utilizadas
+
+- Python 3.13
+- Django 5.x
+- Django REST Framework
+- PostgreSQL
+- JWT (SimpleJWT)
+- Swagger (drf-spectacular)
+- Redoc para documentação
+- Git + GitHub
+- Pytest / Django TestCase para testes
 
 ---
 
@@ -150,10 +159,6 @@ python manage.py runserver
 - ✅ Perfil de Usuário (dados pessoais com autenticação)  
 
 
-
-  
-
-
 ---
 
 ## 🧪 Testes automatizados
@@ -164,13 +169,14 @@ Executar todos os testes:
 python manage.py test
 ```
 
-Testes cobrem:
-- CRUD de todos os módulos principais
-- Respostas e status da API
-- Upload de arquivos
-- Criação e autenticação de usuário
+🧠 Visão futura com IA
+🔎 Classificação automática de ocorrências
 
----
+📊 Dashboards inteligentes com indicadores por condomínio
+
+🔔 Alertas preditivos (manutenções, visitantes, vencimentos)
+
+🤖 Integração com chatbots para autoatendimento
 
 ## 👨‍💻 Autor
 
