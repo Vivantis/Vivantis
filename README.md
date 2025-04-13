@@ -89,28 +89,6 @@ DATABASES = {
     }
 }
 ```
-#### 2.2 Migre e crie um superusuário
-```bash
-python manage.py migrate
-python manage.py runserver
-```
-
-### 2.3. Configure o banco de dados PostgreSQL
-
-No `settings.py`:
-
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'vivantis_db',
-        'USER': 'seu_usuario',
-        'PASSWORD': 'sua_senha',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-```
 
 ### 5. Migre, crie um superusuário e rode o servidor
 
