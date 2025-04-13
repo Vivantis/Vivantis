@@ -37,6 +37,7 @@ Sistema inteligente e modular para gestão de condomínios, desenvolvido com Dja
 
 ## 🛠 Tecnologias utilizadas
 
+### Backend
 - Python 3.13  
 - Django 5.x  
 - Django REST Framework  
@@ -44,6 +45,13 @@ Sistema inteligente e modular para gestão de condomínios, desenvolvido com Dja
 - SimpleJWT (autenticação)  
 - drf-spectacular (Swagger)  
 - Git e GitHub  
+
+### Frontend
+- Next.js 14 (App Router + TypeScript)  
+- TailwindCSS  
+- Tema Claro/Escuro  
+- Arquitetura Mobile-First  
+- Suporte a PWA (em desenvolvimento)  
 
 ---
 
@@ -56,20 +64,38 @@ git clone https://github.com/seu-usuario/Vivantis.git
 cd Vivantis
 ```
 
-### 2. Crie e ative o ambiente virtual
+### ⚙️ 2. Rodando o Backend (Django)
 
 ```bash
-python -m venv venv
-.\venv\Scripts\activate
-```
-
-### 3. Instale as dependências
-
-```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Configure o banco de dados PostgreSQL
+#### 2.1 Configure o banco de dados PostgreSQL
+
+No `settings.py`:
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'vivantis_db',
+        'USER': 'seu_usuario',
+        'PASSWORD': 'sua_senha',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+```
+#### 2.2 Migre e crie um superusuário
+```bash
+python manage.py migrate
+python manage.py runserver
+```
+
+### 2.3. Configure o banco de dados PostgreSQL
 
 No `settings.py`:
 
@@ -86,19 +112,22 @@ DATABASES = {
 }
 ```
 
-### 5. Migre e crie um superusuário
+### 5. Migre, crie um superusuário e rode o servidor
 
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
 ```
-
-### 6. Rode o servidor
+### 💻 3. Rodando o Frontend (Next.js)
 
 ```bash
-python manage.py runserver
+cd frontend
+npm install
+npm run dev
 ```
+
+A aplicação frontend estará em: http://localhost:3000/
 
 ---
 
@@ -149,11 +178,6 @@ python manage.py runserver
 - ✅ Auditoria de Ações  
 - ✅ Perfil de Usuário (dados pessoais com autenticação)  
 
-
-
-  
-
-
 ---
 
 ## 🧪 Testes automatizados
@@ -179,3 +203,6 @@ Visão de inovação, automação e experiência condominial com IA ⚙️
 
 ---
 
+## 📄 Licença
+
+MIT © 2025 — Vivantis Tecnologia Inteligente para Condomínios
