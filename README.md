@@ -56,7 +56,14 @@ Sistema modular, robusto e inteligente desenvolvido com Django + PostgreSQL para
 
 ---
 
-## 🚀 Como rodar o projeto localmente
+### Frontend
+- Next.js 14 (App Router + TypeScript)  
+- TailwindCSS  
+- Tema Claro/Escuro  
+- Arquitetura Mobile-First  
+- Suporte a PWA (em desenvolvimento) 
+
+## 🚀 Como rodar o projeto localmente (Backend)
 
 ### 1. Clone o repositório
 
@@ -109,6 +116,16 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
+# 🚀 Como rodar o projeto localmente (Frontend)
+
+### 1. Rodando o Frontend (Next.js)
+
+```bash
+Copiar
+cd frontend
+npm install
+npm run dev
+```
 ---
 
 ## 🔐 Autenticação com JWT
@@ -183,6 +200,3 @@ python manage.py test
 
 Projeto desenvolvido por **Vitor Alves**, **Lucas Leal** e **Caio Ferreira**  
 Visão de inovação, automação e experiência condominial com IA ⚙️
-
----
-
