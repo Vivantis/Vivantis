@@ -4,6 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Condominio, Unidade, Morador
 from .serializers import CondominioSerializer, UnidadeSerializer, MoradorSerializer
 
+from django_filters.rest_framework import DjangoFilterBackend
+
+
 # ViewSet para o modelo Condominio
 # Fornece endpoints para listar, criar, editar e deletar condomínios
 class CondominioViewSet(viewsets.ModelViewSet):
@@ -25,7 +28,12 @@ class UnidadeViewSet(viewsets.ModelViewSet):
 # ViewSet para o modelo Morador
 # Permite o gerenciamento dos moradores vinculados às unidades
 class MoradorViewSet(viewsets.ModelViewSet):
+    
     queryset = Morador.objects.all()
     serializer_class = MoradorSerializer
-    # Autenticação obrigatória para acessar os dados dos moradores
     permission_classes = [IsAuthenticated]
+
+    # Filtros para facilitar buscas
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['nome', 'email', 'unidade']
+
