@@ -2,29 +2,44 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { authService } from '@/services/auth'
 
 export function LoginForm() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setIsLoading(true)
 
-    const res = await fetch('http://localhost:8000/api/token/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: email, password }),
-    })
-
-    if (res.ok) {
-      const data = await res.json()
-      localStorage.setItem('token', data.access)
-      router.push('/dashboard')
-    } else {
-      setError('Usuário ou senha inválidos.')
+    try {
+      // Tenta fazer login
+      const authResponse = await authService.login(username, password)
+      
+      // Salva os tokens
+      authService.setTokens(authResponse.access, authResponse.refresh)
+      
+      // Obtém o perfil do usuário
+      const userProfile = await authService.getUserProfile(authResponse.access)
+      
+      // Redireciona baseado no tipo de usuário
+      if (userProfile.is_administrador_geral) {
+        router.push('/admin/dashboard')
+      } else if (userProfile.is_morador) {
+        router.push('/morador/dashboard')
+      } else if (userProfile.is_portaria) {
+        router.push('/portaria/dashboard')
+      } else {
+        router.push('/dashboard')
+      }
+    } catch (error) {
+      setError('Usuário ou senha inválidos')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -38,13 +53,13 @@ export function LoginForm() {
       </h2>
       <div className="mb-4">
         <label className="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">
-          E-mail
+          Usuário
         </label>
         <input
-          type="email"
+          type="text"
           className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           required
         />
       </div>
@@ -63,9 +78,10 @@ export function LoginForm() {
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       <button
         type="submit"
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        disabled={isLoading}
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
       >
-        Entrar
+        {isLoading ? 'Entrando...' : 'Entrar'}
       </button>
     </form>
   )
