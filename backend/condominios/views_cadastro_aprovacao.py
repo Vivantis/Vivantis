@@ -1,13 +1,14 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAdminUser
-from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound
+from django.contrib.auth.models import User
 
 from condominios.serializers import UserSerializer
 
-# View de Cadastro de Usuário (não ativa o usuário automaticamente)
+
+# 1. Cadastro de novo usuário (inativo por padrão)
 class CadastroUsuarioView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -15,14 +16,11 @@ class CadastroUsuarioView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         """
-        Sobrescreve o método create para garantir que todo novo usuário
-        seja criado com is_active=False, mesmo que venha no payload.
+        Cria um novo usuário com is_active=False, independentemente do payload.
         """
-        # Faz uma cópia dos dados enviados e força is_active=False
         data = request.data.copy()
-        data['is_active'] = False
+        data['is_active'] = False  # Garante que o usuário será inativo
 
-        # Valida e salva o usuário
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -30,17 +28,16 @@ class CadastroUsuarioView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        # Criação do usuário inativo
         serializer.save()
 
-# View para um administrador aprovar um usuário (ativar)
+
+# 2. Aprovação de usuário (admin ativa a conta)
 class AprovarUsuarioView(APIView):
     permission_classes = [IsAdminUser]
 
     def patch(self, request, pk):
         """
-        Permite que um superusuário aprove um usuário pendente,
-        ativando sua conta (is_active=True)
+        Ativa a conta de um usuário inativo.
         """
         try:
             user = User.objects.get(pk=pk)
@@ -53,3 +50,12 @@ class AprovarUsuarioView(APIView):
         user.is_active = True
         user.save()
         return Response({"detail": "Usuário aprovado com sucesso."}, status=status.HTTP_200_OK)
+
+
+# 3. Listagem de usuários pendentes (inativos)
+class UsuariosPendentesView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
+
+    def get_queryset(self):
+        return User.objects.filter(is_active=False)
