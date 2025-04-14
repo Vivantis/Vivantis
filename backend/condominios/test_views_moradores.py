@@ -37,7 +37,7 @@ class MoradorAPITests(APITestCase):
         """Testa a listagem de moradores via GET"""
         response = self.client.get("/api/moradores/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data), 1)
+        self.assertGreaterEqual(len(response.data.get("results", [])), 1)
 
     def test_atualizar_morador(self):
         """Testa edição de dados do morador via PUT"""
@@ -56,27 +56,27 @@ class MoradorAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Morador.objects.filter(id=self.morador.id).exists())
 
+    def test_filtrar_moradores_por_nome_email_unidade(self):
+        """
+        Testa filtragem de moradores por nome, email e unidade
+        """
+        unidade2 = Unidade.objects.create(numero="102", bloco="B", condominio=self.condominio)
+        Morador.objects.create(nome="Maria Silva", email="maria@email.com", unidade=unidade2)
+        Morador.objects.create(nome="Carlos Lima", email="carlos@email.com", unidade=self.unidade)
 
-def test_filtrar_moradores_por_nome_email_unidade(self):
-    """
-    Testa filtragem de moradores por nome, email e unidade
-    """
-    # Morador adicional para teste de filtragem
-    unidade2 = Unidade.objects.create(numero="102", bloco="B", condominio=self.condominio)
-    morador1 = Morador.objects.create(nome="Maria Silva", email="maria@email.com", unidade=unidade2)
-    morador2 = Morador.objects.create(nome="Carlos Lima", email="carlos@email.com", unidade=self.unidade)
+        # Filtrar por nome
+        response = self.client.get('/api/moradores/?nome=Maria')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        nomes = [m["nome"] for m in response.data.get("results", [])]
+        self.assertIn("Maria Silva", nomes)
 
-    # Filtrar por nome
-    response = self.client.get('/api/moradores/?nome=Maria')
-    self.assertEqual(response.status_code, status.HTTP_200_OK)
-    self.assertTrue(any("Maria" in m["nome"] for m in response.data))
+        # Filtrar por email
+        response = self.client.get('/api/moradores/?email=carlos@email.com')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["results"][0]['email'], 'carlos@email.com')
 
-    # Filtrar por email
-    response = self.client.get('/api/moradores/?email=carlos@email.com')
-    self.assertEqual(response.status_code, status.HTTP_200_OK)
-    self.assertEqual(response.data[0]['email'], 'carlos@email.com')
-
-    # Filtrar por unidade (usando ID)
-    response = self.client.get(f'/api/moradores/?unidade={self.unidade.id}')
-    self.assertEqual(response.status_code, status.HTTP_200_OK)
-    self.assertTrue(all(m['unidade'] == self.unidade.id for m in response.data))
+        # Filtrar por unidade (usando ID)
+        response = self.client.get(f'/api/moradores/?unidade={self.unidade.id}')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        unidades = [m["unidade"] for m in response.data["results"]]
+        self.assertTrue(all(uid == self.unidade.id for uid in unidades))

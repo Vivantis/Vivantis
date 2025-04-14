@@ -59,7 +59,7 @@ class ComprovantePagamentoAPITests(APITestCase):
         )
         response = self.client.get('/api/comprovantes/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data), 1)
+        self.assertGreaterEqual(response.data["count"], 1)
 
     def test_atualizar_comprovante(self):
         """Testa atualização do status de um comprovante"""
@@ -93,31 +93,31 @@ class ComprovantePagamentoAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(ComprovantePagamento.objects.filter(id=comprovante.id).exists())
 
-def test_filtrar_comprovantes_por_morador(self):
-    """Testa filtro de comprovantes por morador"""
-    # Cria um segundo morador
-    outro_morador = Morador.objects.create(nome="Maria", email="maria@email.com", unidade=self.unidade)
+    def test_filtrar_comprovantes_por_morador(self):
+        """Testa filtro de comprovantes por morador"""
+        # Cria um segundo morador
+        outro_morador = Morador.objects.create(nome="Maria", email="maria@email.com", unidade=self.unidade)
 
-    # Comprovante de Maria
-    ComprovantePagamento.objects.create(
-        cobranca=self.cobranca,
-        morador=outro_morador,
-        arquivo=self.arquivo,
-        comentario="Comprovante de Maria"
-    )
+        # Comprovante de Maria
+        ComprovantePagamento.objects.create(
+            cobranca=self.cobranca,
+            morador=outro_morador,
+            arquivo=self.arquivo,
+            comentario="Comprovante de Maria"
+        )
 
-    # Comprovante de João (self.morador)
-    ComprovantePagamento.objects.create(
-        cobranca=self.cobranca,
-        morador=self.morador,
-        arquivo=self.arquivo,
-        comentario="Comprovante do João"
-    )
+        # Comprovante de João (self.morador)
+        ComprovantePagamento.objects.create(
+            cobranca=self.cobranca,
+            morador=self.morador,
+            arquivo=self.arquivo,
+            comentario="Comprovante do João"
+        )
 
-    # Aplica o filtro por morador
-    url = f'/api/comprovantes/?morador={self.morador.id}'
-    response = self.client.get(url)
+        # Aplica o filtro por morador
+        url = f'/api/comprovantes/?morador={self.morador.id}'
+        response = self.client.get(url)
 
-    self.assertEqual(response.status_code, status.HTTP_200_OK)
-    self.assertEqual(len(response.data), 1)
-    self.assertEqual(response.data[0]['morador'], self.morador.id)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]['morador'], self.morador.id)
