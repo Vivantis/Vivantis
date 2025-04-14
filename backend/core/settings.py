@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +42,6 @@ INSTALLED_APPS = [
     'rest_framework',       # habilita o Django REST Framework
     'drf_spectacular',
     'drf_spectacular_sidecar',
-    'corsheaders'
 ]
 
 
@@ -158,6 +158,7 @@ SPECTACULAR_SETTINGS = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://localhost:5173",  # porta do Vite
 ]
 
 CORS_ALLOW_CREDENTIALS = True
