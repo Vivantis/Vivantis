@@ -2,12 +2,19 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # 🏢 Modelo que representa um Condomínio
+# condominios/models.py (trecho)
 class Condominio(models.Model):
     nome = models.CharField(max_length=100)
     endereco = models.TextField()
+    
+    # 🆕 Campos adicionados para suportar filtragem
+    cidade = models.CharField(max_length=100, blank=True, null=True)
+    estado = models.CharField(max_length=2, blank=True, null=True)
+    ativo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nome
+
 
 
 # 🏠 Modelo que representa uma Unidade dentro de um Condomínio

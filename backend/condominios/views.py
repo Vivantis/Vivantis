@@ -8,14 +8,23 @@ from .models import Condominio, Unidade, Morador
 from .serializers import CondominioSerializer, UnidadeSerializer, MoradorSerializer
 from .permissions import get_viewset_permissions  # Certifique-se de importar isso
 
-# ViewSet para o modelo Condominio
+# ─────────────────────────────────────────────────────────────
+# 🏢 ViewSet para o modelo Condominio
+# ─────────────────────────────────────────────────────────────
 class CondominioViewSet(viewsets.ModelViewSet):
-    queryset = Condominio.objects.all()
+    queryset = Condominio.objects.all().order_by('nome')
     serializer_class = CondominioSerializer
     permission_classes = get_viewset_permissions('CondominioViewSet')
 
+    # Habilita filtros, busca e ordenação
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['cidade', 'estado', 'ativo']     # Ex: ?cidade=Curitiba&ativo=True
+    search_fields = ['nome', 'endereco']                 # Ex: ?search=Edifício Central
+    ordering_fields = ['nome', 'cidade']                 # Ex: ?ordering=nome
 
-# ViewSet para o modelo Unidade
+# ─────────────────────────────────────────────────────────────
+# 🏠 ViewSet para o modelo Unidade
+# ─────────────────────────────────────────────────────────────
 class UnidadeViewSet(viewsets.ModelViewSet):
     queryset = Unidade.objects.all()
     serializer_class = UnidadeSerializer
@@ -23,12 +32,13 @@ class UnidadeViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['numero', 'bloco', 'condominio']
 
-
-# ViewSet para o modelo Morador
+# ─────────────────────────────────────────────────────────────
+# 👤 ViewSet para o modelo Morador
+# ─────────────────────────────────────────────────────────────
 class MoradorViewSet(viewsets.ModelViewSet):
     queryset = Morador.objects.all()
     serializer_class = MoradorSerializer
-    permission_classes = get_viewset_permissions('MoradorViewSet')  # Usa as permissões definidas por nome
+    permission_classes = get_viewset_permissions('MoradorViewSet')
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['email', 'unidade']
     search_fields = ['nome']
