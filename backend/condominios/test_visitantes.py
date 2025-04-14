@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from .models import Visitante, Condominio, Unidade, Morador
+from condominios.models import Visitante, Condominio, Unidade, Morador
 
 
 class VisitanteAPITests(APITestCase):
@@ -43,7 +43,7 @@ class VisitanteAPITests(APITestCase):
         )
         response = self.client.get('/api/visitantes/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data), 1)
+        self.assertGreaterEqual(len(response.data['results']), 1)
 
     def test_atualizar_visitante(self):
         """Testa a atualização dos dados de um visitante"""
@@ -74,3 +74,38 @@ class VisitanteAPITests(APITestCase):
         response = self.client.delete(f'/api/visitantes/{visitante.id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Visitante.objects.filter(id=visitante.id).exists())
+
+    def test_filtrar_visitantes(self):
+        """Testa a filtragem de visitantes por nome, documento, unidade e morador_responsavel"""
+        visitante1 = Visitante.objects.create(
+            nome="Carlos Visitante",
+            documento="123456789",
+            unidade=self.unidade,
+            morador_responsavel=self.morador
+        )
+        visitante2 = Visitante.objects.create(
+            nome="Ana Visitante",
+            documento="987654321",
+            unidade=self.unidade,
+            morador_responsavel=self.morador
+        )
+
+        # Filtrar por nome
+        response = self.client.get(f'/api/visitantes/?nome=Carlos Visitante')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(any("Carlos" in v["nome"] for v in response.data['results']))
+
+        # Filtrar por documento
+        response = self.client.get(f'/api/visitantes/?documento=987654321')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['results'][0]['documento'], "987654321")
+
+        # Filtrar por unidade
+        response = self.client.get(f'/api/visitantes/?unidade={self.unidade.id}')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(all(v["unidade"] == self.unidade.id for v in response.data['results']))
+
+        # Filtrar por morador responsável
+        response = self.client.get(f'/api/visitantes/?morador_responsavel={self.morador.id}')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(all(v["morador_responsavel"] == self.morador.id for v in response.data['results']))
