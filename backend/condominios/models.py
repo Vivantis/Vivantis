@@ -22,6 +22,8 @@ class Unidade(models.Model):
 
 # 👤 Modelo que representa um Morador
 class Morador(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='morador', null=True)
+
     nome = models.CharField(max_length=100)
     email = models.EmailField()
     unidade = models.ForeignKey(Unidade, on_delete=models.CASCADE, null=True, blank=True)
