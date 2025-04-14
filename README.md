@@ -28,35 +28,53 @@ Sistema modular, robusto e inteligente desenvolvido com Django + PostgreSQL para
 
 🆕 **Filtragem inteligente nas APIs de:**
 
-- **Comprovantes de Pagamento**
-  - Por morador
-  - Por cobrança
-  - Por status de validação
+### ✅ Comprovantes de Pagamento
+- Por morador  
+- Por cobrança  
+- Por status de validação  
 
-- **Moradores**
-  - Por nome
-  - Por e-mail
-  - Por unidade
+### ✅ Moradores
+- Por nome  
+- Por e-mail  
+- Por unidade  
 
-✨ Essas funcionalidades foram totalmente testadas com **testes automatizados**, garantindo estabilidade para uso em produção e integração com o front-end.
+### ✅ Visitantes
+- Por nome  
+- Por documento  
+
+### ✅ Ocorrências
+- Por status  
+- Por título  
+- Por unidade  
+
+### ✅ Documentos
+- Por título  
+- Por tipo  
+
+### ✅ Prestadores de Serviço
+- Por nome  
+
+### ✅ Cadastro e Aprovação de Usuários
+- Cadastro com ativação via painel do administrador  
+- Endpoint protegido para aprovação manual  
+
+✨ Todas as funcionalidades contam com testes automatizados, garantindo estabilidade para produção e integração com o front-end.
 
 ---
 
 ## 🛠️ Tecnologias utilizadas
 
-- Python 3.13
-- Django 5.x
-- Django REST Framework
-- PostgreSQL
-- JWT (SimpleJWT)
-- Swagger (drf-spectacular)
-- Redoc para documentação
-- Git + GitHub
-- Pytest / Django TestCase para testes
+**Backend:**
+- Python 3.13  
+- Django 5.x  
+- Django REST Framework  
+- PostgreSQL  
+- JWT (SimpleJWT)  
+- Swagger (drf-spectacular)  
+- Redoc  
+- Pytest / Django TestCase  
 
----
-
-### Frontend
+**Frontend:**
 - Next.js 14 (App Router + TypeScript)  
 - TailwindCSS  
 - Tema Claro/Escuro  
