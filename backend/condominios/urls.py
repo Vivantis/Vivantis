@@ -86,3 +86,6 @@ urlpatterns += auditoria_urls
 # Perfil do Usuário
 from .urls_perfil import urlpatterns as perfil_urls
 urlpatterns += perfil_urls
+
+from .urls_cadastro_aprovacao import urlpatterns as cadastro_aprovacao_urls
+urlpatterns += cadastro_aprovacao_urls

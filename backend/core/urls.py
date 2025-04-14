@@ -42,3 +42,4 @@ urlpatterns += [
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),  # Swagger UI
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),         # Redoc
 ]
+path('api/usuarios/', include('condominios.urls_cadastro_aprovacao')),

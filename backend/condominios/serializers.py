@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from .models import (
     Condominio, Unidade, Morador, Prestador, Ocorrencia, Visitante,
     ControleAcesso, Correspondencia, ReservaEspaco, EspacoComum, Documento,
@@ -148,3 +149,28 @@ class PerfilUsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = PerfilUsuario
         fields = ['id', 'username', 'email', 'telefone', 'foto', 'bio']
+
+
+# 👤 Serializer para criação de usuários com senha segura e ativação manual
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password', 'is_active']
+        read_only_fields = ['id', 'is_active']
+
+    def create(self, validated_data):
+        """
+        Cria o usuário com hash da senha e respeita o valor de is_active (default=False).
+        """
+        is_active = validated_data.get('is_active', False)
+
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data.get('email'),
+            password=validated_data['password']
+        )
+        user.is_active = is_active
+        user.save()
+        return user
