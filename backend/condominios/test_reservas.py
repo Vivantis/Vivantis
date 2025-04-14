@@ -1,7 +1,8 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from .models import Condominio, Unidade, Morador, EspacoComum, ReservaEspaco
+from condominios.models import Condominio, Unidade, Morador, EspacoComum, ReservaEspaco
+from datetime import date, timedelta
 
 
 class ReservaEspacoAPITests(APITestCase):
@@ -18,15 +19,17 @@ class ReservaEspacoAPITests(APITestCase):
         self.condominio = Condominio.objects.create(nome="Residencial Morada", endereco="Rua 10, nº 50")
         self.unidade = Unidade.objects.create(numero="101", bloco="A", condominio=self.condominio)
         self.morador = Morador.objects.create(nome="Julia Moradora", email="julia@example.com", unidade=self.unidade)
-
         self.espaco = EspacoComum.objects.create(nome="Salão de Festas", condominio=self.condominio)
+
+        # Data futura para garantir validade nos testes
+        self.data_futura = (date.today() + timedelta(days=30)).isoformat()
 
         # Dados padrão para criação via API
         self.dados = {
             "morador": self.morador.id,
             "unidade": self.unidade.id,
             "espaco": self.espaco.id,
-            "data_reserva": "2025-05-15",
+            "data_reserva": self.data_futura,
             "horario_inicio": "18:00",
             "horario_fim": "22:00",
             "status": "pendente",
@@ -45,7 +48,7 @@ class ReservaEspacoAPITests(APITestCase):
             morador=self.morador,
             unidade=self.unidade,
             espaco=self.espaco,
-            data_reserva="2025-05-20",
+            data_reserva=self.data_futura,
             horario_inicio="14:00",
             horario_fim="18:00",
             status="aprovado"
@@ -55,12 +58,12 @@ class ReservaEspacoAPITests(APITestCase):
         self.assertGreaterEqual(len(response.data), 1)
 
     def test_atualizar_reserva(self):
-        """Testa a atualização de uma reserva (ex: mudar status)"""
+        """Testa a atualização de uma reserva"""
         reserva = ReservaEspaco.objects.create(
             morador=self.morador,
             unidade=self.unidade,
             espaco=self.espaco,
-            data_reserva="2025-05-25",
+            data_reserva=self.data_futura,
             horario_inicio="10:00",
             horario_fim="12:00",
             status="pendente"
@@ -69,7 +72,7 @@ class ReservaEspacoAPITests(APITestCase):
             "morador": self.morador.id,
             "unidade": self.unidade.id,
             "espaco": self.espaco.id,
-            "data_reserva": "2025-05-25",
+            "data_reserva": self.data_futura,
             "horario_inicio": "10:00",
             "horario_fim": "12:00",
             "status": "aprovado",
@@ -85,7 +88,7 @@ class ReservaEspacoAPITests(APITestCase):
             morador=self.morador,
             unidade=self.unidade,
             espaco=self.espaco,
-            data_reserva="2025-06-01",
+            data_reserva=self.data_futura,
             horario_inicio="16:00",
             horario_fim="20:00",
             status="pendente"
