@@ -12,11 +12,9 @@ class ComprovantePagamentoAPITests(APITestCase):
     """
 
     def setUp(self):
-        # Cria e autentica um usuário
         self.user = User.objects.create_user(username='admin', password='admin123')
         self.client.force_authenticate(user=self.user)
 
-        # Cria dados relacionados
         self.condominio = Condominio.objects.create(nome="Residencial Teste", endereco="Rua A, 123")
         self.unidade = Unidade.objects.create(numero="101", bloco="A", condominio=self.condominio)
         self.morador = Morador.objects.create(nome="João", email="joao@email.com", unidade=self.unidade)
@@ -31,10 +29,8 @@ class ComprovantePagamentoAPITests(APITestCase):
             status="pendente"
         )
 
-        # Comprovante simulado
         self.arquivo = SimpleUploadedFile("comprovante.pdf", b"fake-pdf-content", content_type="application/pdf")
 
-        # Dados para POST
         self.dados = {
             "cobranca": self.cobranca.id,
             "morador": self.morador.id,
@@ -44,13 +40,11 @@ class ComprovantePagamentoAPITests(APITestCase):
         }
 
     def test_criar_comprovante(self):
-        """Testa envio de comprovante via API"""
         response = self.client.post('/api/comprovantes/', self.dados, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['comentario'], self.dados['comentario'])
 
     def test_listar_comprovantes(self):
-        """Testa listagem de comprovantes"""
         ComprovantePagamento.objects.create(
             cobranca=self.cobranca,
             morador=self.morador,
@@ -62,7 +56,6 @@ class ComprovantePagamentoAPITests(APITestCase):
         self.assertGreaterEqual(response.data["count"], 1)
 
     def test_atualizar_comprovante(self):
-        """Testa atualização do status de um comprovante"""
         comprovante = ComprovantePagamento.objects.create(
             cobranca=self.cobranca,
             morador=self.morador,
@@ -82,7 +75,6 @@ class ComprovantePagamentoAPITests(APITestCase):
         self.assertTrue(response.data['validado'])
 
     def test_deletar_comprovante(self):
-        """Testa exclusão de comprovante"""
         comprovante = ComprovantePagamento.objects.create(
             cobranca=self.cobranca,
             morador=self.morador,
@@ -93,31 +85,37 @@ class ComprovantePagamentoAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(ComprovantePagamento.objects.filter(id=comprovante.id).exists())
 
-    def test_filtrar_comprovantes_por_morador(self):
-        """Testa filtro de comprovantes por morador"""
-        # Cria um segundo morador
-        outro_morador = Morador.objects.create(nome="Maria", email="maria@email.com", unidade=self.unidade)
-
-        # Comprovante de Maria
-        ComprovantePagamento.objects.create(
-            cobranca=self.cobranca,
-            morador=outro_morador,
-            arquivo=self.arquivo,
-            comentario="Comprovante de Maria"
-        )
-
-        # Comprovante de João (self.morador)
-        ComprovantePagamento.objects.create(
-            cobranca=self.cobranca,
-            morador=self.morador,
-            arquivo=self.arquivo,
-            comentario="Comprovante do João"
-        )
-
-        # Aplica o filtro por morador
-        url = f'/api/comprovantes/?morador={self.morador.id}'
-        response = self.client.get(url)
-
+    def test_filtrar_por_morador(self):
+        outro = Morador.objects.create(nome="Maria", email="maria@email.com", unidade=self.unidade)
+        ComprovantePagamento.objects.create(cobranca=self.cobranca, morador=outro, arquivo=self.arquivo, comentario="Outro")
+        ComprovantePagamento.objects.create(cobranca=self.cobranca, morador=self.morador, arquivo=self.arquivo, comentario="Principal")
+        response = self.client.get(f'/api/comprovantes/?morador={self.morador.id}')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]['morador'], self.morador.id)
+
+    def test_filtrar_por_cobranca(self):
+        ComprovantePagamento.objects.create(cobranca=self.cobranca, morador=self.morador, arquivo=self.arquivo, comentario="Com cobrança")
+        response = self.client.get(f'/api/comprovantes/?cobranca={self.cobranca.id}')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(response.data["count"], 1)
+
+    def test_filtrar_por_validado(self):
+        ComprovantePagamento.objects.create(cobranca=self.cobranca, morador=self.morador, arquivo=self.arquivo, comentario="Validado", validado=True)
+        response = self.client.get('/api/comprovantes/?validado=true')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        for item in response.data["results"]:
+            self.assertTrue(item['validado'])
+
+    def test_busca_por_comentario(self):
+        ComprovantePagamento.objects.create(cobranca=self.cobranca, morador=self.morador, arquivo=self.arquivo, comentario="Pix bancário")
+        response = self.client.get('/api/comprovantes/?search=Pix')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(response.data["count"], 1)
+        self.assertIn("Pix", response.data["results"][0]['comentario'])
+
+    def test_ordenar_por_data_envio(self):
+        ComprovantePagamento.objects.create(cobranca=self.cobranca, morador=self.morador, arquivo=self.arquivo, comentario="Mais novo")
+        response = self.client.get('/api/comprovantes/?ordering=-data_envio')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(response.data["count"], 1)
