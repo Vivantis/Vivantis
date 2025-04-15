@@ -291,13 +291,16 @@ class Auditoria(models.Model):
 
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     tipo_acao = models.CharField(max_length=20, choices=ACOES)
-    entidade = models.CharField(max_length=100)
-    objeto_id = models.PositiveIntegerField()
-    descricao = models.TextField()
+    entidade = models.CharField(max_length=100)  # Nome do modelo (ex: Morador)
+    objeto_id = models.CharField(max_length=100)  # Pode ser UUID, inteiro ou string
+    descricao = models.TextField(blank=True)  # Você pode preencher manualmente se quiser explicar algo
+    dados_anteriores = models.JSONField(null=True, blank=True)
+    dados_novos = models.JSONField(null=True, blank=True)
     data = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.entidade} #{self.objeto_id} - {self.get_tipo_acao_display()}"
+
 
 
 # 👨‍💻 Perfil do Usuário
