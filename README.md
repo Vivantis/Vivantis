@@ -6,21 +6,18 @@ Sistema modular, robusto e inteligente desenvolvido com Django + PostgreSQL para
 
 ## 🚀 Funcionalidades principais
 
-- ✅ Cadastro e gerenciamento de **condomínios** e **unidades**
-- 👤 Registro de **moradores**, com vínculo à unidade
-- 💼 Gestão de **prestadores de serviço**
-- 🧾 Controle de **comprovantes de pagamento**
-- 📮 **Correspondências** recebidas e retiradas
-- 📅 **Reserva de espaços comuns** com controle de status
-- 🛠️ **Manutenções** planejadas e acompanhamentos
-- 🔐 **Controle de acesso** para moradores, visitantes e prestadores
-- 👀 Registro e acompanhamento de **ocorrências**
-- 📎 Upload e gestão de **documentos internos** (regulamentos, atas, boletos, etc)
-- 📢 Publicação de **avisos/comunicados**
-- 🧠 Sistema preparado para integração futura com IA (dashboards, previsões e alertas)
-- 🔐 **Autenticação via JWT**
-- 🧪 **Testes automatizados por módulo**
-- 📘 Documentação interativa via Swagger e Redoc
+✅ Cadastro e gerenciamento de **condomínios** e **unidades**  
+👤 Registro de **moradores**, com vínculo à unidade  
+💼 Gestão de **prestadores de serviço**  
+📮 Controle de **correspondências recebidas e retiradas**  
+📎 Upload e gerenciamento de **documentos internos** (regulamentos, atas, boletos)  
+📅 **Reservas de espaços comuns** com controle de status e agenda  
+🔐 **Controle de acesso** de moradores, visitantes e prestadores  
+🛠️ Gestão de **manutenções planejadas** e ocorrências  
+📢 Publicação de **avisos e comunicados** para o condomínio  
+🧾 **Comprovantes de pagamento** vinculados a cobranças  
+👮 Aprovação de usuários com autenticação via **JWT Token**  
+🧠 Pronto para integração com **IA** (dashboards, alertas, previsões futuras)
 
 ---
 
