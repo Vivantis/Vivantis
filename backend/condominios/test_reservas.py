@@ -1,8 +1,11 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from condominios.models import Condominio, Unidade, Morador, EspacoComum, ReservaEspaco
 from datetime import date, timedelta
+from condominios.models import (
+    Condominio, Unidade, Morador,
+    EspacoComum, ReservaEspaco, AdministradorGeral
+)
 
 
 class ReservaEspacoAPITests(APITestCase):
@@ -11,8 +14,9 @@ class ReservaEspacoAPITests(APITestCase):
     """
 
     def setUp(self):
-        # Cria o usuário e associa ao morador pelo email (usado na permissão IsMoradorDono)
+        # Cria o usuário e autentica como administrador geral
         self.user = User.objects.create_user(username='moradora', email='julia@example.com', password='admin123')
+        self.admin = AdministradorGeral.objects.create(user=self.user, nome='Admin Teste', telefone='11999999999')
         self.client.force_authenticate(user=self.user)
 
         # Dados de base para o teste
@@ -29,7 +33,7 @@ class ReservaEspacoAPITests(APITestCase):
             "morador": self.morador.id,
             "unidade": self.unidade.id,
             "espaco": self.espaco.id,
-            "data_reserva": self.data_futura,
+            "data": self.data_futura,
             "horario_inicio": "18:00",
             "horario_fim": "22:00",
             "status": "pendente",
@@ -40,7 +44,9 @@ class ReservaEspacoAPITests(APITestCase):
         """Testa a criação de uma nova reserva"""
         response = self.client.post('/api/reservas/', self.dados, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['status'], "pendente")
+        self.assertEqual(response.data.get('status'), "pendente")
+        self.assertEqual(response.data.get('morador'), self.morador.id)
+        self.assertEqual(response.data.get('unidade'), self.unidade.id)
 
     def test_listar_reservas(self):
         """Testa a listagem de reservas"""
@@ -48,14 +54,15 @@ class ReservaEspacoAPITests(APITestCase):
             morador=self.morador,
             unidade=self.unidade,
             espaco=self.espaco,
-            data_reserva=self.data_futura,
+            data=self.data_futura,
             horario_inicio="14:00",
             horario_fim="18:00",
             status="aprovado"
         )
         response = self.client.get('/api/reservas/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data), 1)
+        self.assertIn("results", response.data)
+        self.assertGreaterEqual(len(response.data["results"]), 1)
 
     def test_atualizar_reserva(self):
         """Testa a atualização de uma reserva"""
@@ -63,7 +70,7 @@ class ReservaEspacoAPITests(APITestCase):
             morador=self.morador,
             unidade=self.unidade,
             espaco=self.espaco,
-            data_reserva=self.data_futura,
+            data=self.data_futura,
             horario_inicio="10:00",
             horario_fim="12:00",
             status="pendente"
@@ -72,7 +79,7 @@ class ReservaEspacoAPITests(APITestCase):
             "morador": self.morador.id,
             "unidade": self.unidade.id,
             "espaco": self.espaco.id,
-            "data_reserva": self.data_futura,
+            "data": self.data_futura,
             "horario_inicio": "10:00",
             "horario_fim": "12:00",
             "status": "aprovado",
@@ -80,7 +87,8 @@ class ReservaEspacoAPITests(APITestCase):
         }
         response = self.client.put(f'/api/reservas/{reserva.id}/', novos_dados, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['status'], "aprovado")
+        self.assertEqual(response.data.get('status'), "aprovado")
+        self.assertEqual(response.data.get('observacoes'), "Confirmada pela administração")
 
     def test_deletar_reserva(self):
         """Testa a exclusão de uma reserva"""
@@ -88,7 +96,7 @@ class ReservaEspacoAPITests(APITestCase):
             morador=self.morador,
             unidade=self.unidade,
             espaco=self.espaco,
-            data_reserva=self.data_futura,
+            data=self.data_futura,
             horario_inicio="16:00",
             horario_fim="20:00",
             status="pendente"

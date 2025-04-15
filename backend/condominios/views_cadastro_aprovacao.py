@@ -4,11 +4,15 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound
 from django.contrib.auth.models import User
+from drf_spectacular.utils import extend_schema
 
 from condominios.serializers import UserSerializer
 
 
-# 1. Cadastro de novo usuário (inativo por padrão)
+# ─────────────────────────────────────────────────────────────
+# 🔐 1. Cadastro de novo usuário (inativo por padrão)
+# Endpoint: POST /api/usuarios/cadastro/
+# ─────────────────────────────────────────────────────────────
 class CadastroUsuarioView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -31,10 +35,15 @@ class CadastroUsuarioView(generics.CreateAPIView):
         serializer.save()
 
 
-# 2. Aprovação de usuário (admin ativa a conta)
+# ─────────────────────────────────────────────────────────────
+# ✅ 2. Aprovação de usuário (admin ativa a conta)
+# Endpoint: PATCH /api/usuarios/cadastro/aprovar/<id>/
+# ─────────────────────────────────────────────────────────────
 class AprovarUsuarioView(APIView):
     permission_classes = [IsAdminUser]
+    serializer_class = UserSerializer  # Ajuda na documentação do Swagger
 
+    @extend_schema(responses=UserSerializer)
     def patch(self, request, pk):
         """
         Ativa a conta de um usuário inativo.
@@ -52,7 +61,10 @@ class AprovarUsuarioView(APIView):
         return Response({"detail": "Usuário aprovado com sucesso."}, status=status.HTTP_200_OK)
 
 
-# 3. Listagem de usuários pendentes (inativos)
+# ─────────────────────────────────────────────────────────────
+# 📋 3. Listagem de usuários pendentes (inativos)
+# Endpoint: GET /api/usuarios/cadastro/pendentes/
+# ─────────────────────────────────────────────────────────────
 class UsuariosPendentesView(generics.ListAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser]

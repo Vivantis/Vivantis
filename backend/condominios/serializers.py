@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from drf_spectacular.utils import extend_schema_field
 from .models import (
     Condominio, Unidade, Morador, Prestador, Ocorrencia, Visitante,
     ControleAcesso, Correspondencia, ReservaEspaco, EspacoComum, Documento,
@@ -28,16 +29,23 @@ class UnidadeSerializer(serializers.ModelSerializer):
 # 👤 Morador
 class MoradorSerializer(serializers.ModelSerializer):
     nome_completo = serializers.SerializerMethodField()
+    pode_votar_display = serializers.SerializerMethodField()
 
     class Meta:
         model = Morador
         fields = [
-            'id', 'nome', 'sobrenome', 'email', 'telefone', 'unidade',
-            'data_nascimento', 'foto', 'cpf', 'rg', 'nome_completo'
+            'id', 'nome', 'email', 'unidade',
+            'cpf', 'rg', 'nome_completo',
+            'is_proprietario', 'is_inquilino', 'pode_votar', 'pode_votar_display'
         ]
 
-    def get_nome_completo(self, obj):
-        return f"{obj.nome} {obj.sobrenome}"
+    @extend_schema_field(str)
+    def get_nome_completo(self, obj: Morador) -> str:
+        return obj.nome
+
+    @extend_schema_field(str)
+    def get_pode_votar_display(self, obj: Morador) -> str:
+        return "Sim" if obj.pode_votar else "Não"
 
 
 # 🛠️ Prestador
@@ -54,11 +62,14 @@ class OcorrenciaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ocorrencia
         fields = [
-            'id', 'morador', 'descricao', 'status', 'data_registro', 'status_display'
+            'id', 'titulo', 'morador', 'unidade', 'descricao',
+            'status', 'atualizado_em', 'status_display'
         ]
 
-    def get_status_display(self, obj):
+    @extend_schema_field(str)
+    def get_status_display(self, obj: Ocorrencia) -> str:
         return obj.get_status_display()
+
 
 
 # 👥 Visitante
@@ -76,6 +87,7 @@ class ControleAcessoSerializer(serializers.ModelSerializer):
 
 
 # 📦 Correspondência
+# 📦 Correspondência
 class CorrespondenciaSerializer(serializers.ModelSerializer):
     nome_morador = serializers.SerializerMethodField()
     retirada_display = serializers.SerializerMethodField()
@@ -83,15 +95,19 @@ class CorrespondenciaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Correspondencia
         fields = [
-            'id', 'morador', 'descricao', 'retirada', 'data_entrega',
-            'data_retirada', 'nome_morador', 'retirada_display'
+            'id', 'morador', 'unidade', 'descricao', 'entregue_por',
+            'data_recebimento', 'data_retirada', 'observacoes',
+            'nome_morador', 'retirada_display'
         ]
 
-    def get_nome_morador(self, obj):
-        return f"{obj.morador.nome} {obj.morador.sobrenome}"
+    @extend_schema_field(str)
+    def get_nome_morador(self, obj: Correspondencia) -> str:
+        return obj.morador.nome
 
-    def get_retirada_display(self, obj):
-        return "Retirada" if obj.retirada else "Pendente"
+    @extend_schema_field(str)
+    def get_retirada_display(self, obj: Correspondencia) -> str:
+        return "Retirada" if obj.data_retirada else "Pendente"
+
 
 
 # 🧱 Espaço Comum
@@ -109,14 +125,17 @@ class ReservaEspacoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReservaEspaco
         fields = [
-            'id', 'espaco', 'morador', 'data', 'horario_inicio', 'horario_fim',
-            'status', 'espaco_nome', 'status_display'
+            'id', 'espaco', 'morador', 'unidade', 'data', 'horario_inicio',
+            'horario_fim', 'status', 'observacoes',
+            'espaco_nome', 'status_display'
         ]
 
-    def get_espaco_nome(self, obj):
+    @extend_schema_field(str)
+    def get_espaco_nome(self, obj: ReservaEspaco) -> str:
         return obj.espaco.nome if obj.espaco else None
 
-    def get_status_display(self, obj):
+    @extend_schema_field(str)
+    def get_status_display(self, obj: ReservaEspaco) -> str:
         return obj.get_status_display()
 
 
@@ -210,3 +229,16 @@ class UserSerializer(serializers.ModelSerializer):
         user.is_active = is_active
         user.save()
         return user
+
+
+# 📊 Relatório Geral
+class RelatorioGeralSerializer(serializers.Serializer):
+    total_condominios = serializers.IntegerField()
+    total_moradores = serializers.IntegerField()
+    total_ocorrencias_abertas = serializers.IntegerField()
+    total_visitantes_hoje = serializers.IntegerField()
+    reservas_por_espaco = serializers.ListField(
+        child=serializers.DictField(
+            child=serializers.CharField()
+        )
+    )

@@ -1,9 +1,7 @@
-# condominios/test_ocorrencias.py
-
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from .models import Ocorrencia, Condominio, Unidade, Morador, AdministradorGeral
+from condominios.models import Ocorrencia, Condominio, Unidade, Morador, AdministradorGeral
 
 
 class OcorrenciaAPITests(APITestCase):
@@ -12,14 +10,14 @@ class OcorrenciaAPITests(APITestCase):
     """
 
     def setUp(self):
-        # Cria um usuário com permissão de administrador geral
+        # Cria e autentica um administrador geral
         self.user = User.objects.create_user(username='admin', password='admin123', email='admin@example.com')
-        AdministradorGeral.objects.create(user=self.user, nome='Administrador Teste')
+        AdministradorGeral.objects.create(user=self.user, nome='Administrador Teste', telefone='(11) 99999-9999')
         self.client.force_authenticate(user=self.user)
 
-        # Dados de base para os testes
+        # Base de dados
         self.condominio = Condominio.objects.create(nome="Condomínio Exemplo", endereco="Rua A, 123")
-        self.unidade = Unidade.objects.create(numero="101", condominio=self.condominio)
+        self.unidade = Unidade.objects.create(numero="101", bloco="A", condominio=self.condominio)
         self.morador = Morador.objects.create(nome="João Morador", email="joao@example.com", unidade=self.unidade)
 
         self.dados = {
@@ -35,6 +33,7 @@ class OcorrenciaAPITests(APITestCase):
         response = self.client.post('/api/ocorrencias/', self.dados, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['titulo'], self.dados['titulo'])
+        self.assertEqual(response.data['morador'], self.morador.id)
 
     def test_listar_ocorrencias(self):
         """Testa a listagem de ocorrências"""
@@ -47,7 +46,8 @@ class OcorrenciaAPITests(APITestCase):
         )
         response = self.client.get('/api/ocorrencias/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data), 1)
+        self.assertIn("results", response.data)
+        self.assertGreaterEqual(len(response.data['results']), 1)
 
     def test_atualizar_ocorrencia(self):
         """Testa a atualização de uma ocorrência"""
@@ -68,6 +68,7 @@ class OcorrenciaAPITests(APITestCase):
         response = self.client.put(f'/api/ocorrencias/{ocorrencia.id}/', novos_dados, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['status'], "resolvida")
+        self.assertEqual(response.data['titulo'], "Vazamento resolvido")
 
     def test_deletar_ocorrencia(self):
         """Testa a exclusão de uma ocorrência"""

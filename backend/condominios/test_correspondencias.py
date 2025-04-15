@@ -40,13 +40,13 @@ class CorrespondenciaAPITests(APITestCase):
         }
         response = self.client.post('/api/correspondencias/', dados, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['descricao'], dados['descricao'])
+        self.assertEqual(response.data.get('descricao'), dados['descricao'])
 
     def test_listar_correspondencias(self):
         """Testa a listagem de correspondências"""
         response = self.client.get('/api/correspondencias/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data['results']), 1)
+        self.assertGreaterEqual(response.data.get('count', 0), 1)
 
     def test_atualizar_correspondencia(self):
         """Testa a atualização de uma correspondência"""
@@ -60,7 +60,7 @@ class CorrespondenciaAPITests(APITestCase):
         }
         response = self.client.put(f'/api/correspondencias/{self.correspondencia.id}/', novos_dados, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsNotNone(response.data['data_retirada'])
+        self.assertIsNotNone(response.data.get('data_retirada'))
 
     def test_deletar_correspondencia(self):
         """Testa a exclusão de uma correspondência"""
@@ -72,22 +72,22 @@ class CorrespondenciaAPITests(APITestCase):
         """Testa filtro por morador"""
         response = self.client.get(f'/api/correspondencias/?morador={self.morador.id}')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(response.data['count'], 1)
-        for item in response.data['results']:
-            self.assertEqual(item['morador'], self.morador.id)
+        self.assertGreaterEqual(response.data.get('count', 0), 1)
+        for item in response.data.get('results', []):
+            self.assertEqual(item.get('morador'), self.morador.id)
 
     def test_filtrar_por_unidade(self):
         """Testa filtro por unidade"""
         response = self.client.get(f'/api/correspondencias/?unidade={self.unidade.id}')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(response.data['count'], 1)
-        for item in response.data['results']:
-            self.assertEqual(item['unidade'], self.unidade.id)
+        self.assertGreaterEqual(response.data.get('count', 0), 1)
+        for item in response.data.get('results', []):
+            self.assertEqual(item.get('unidade'), self.unidade.id)
 
     def test_filtrar_por_entregue_por(self):
         """Testa filtro por entregador"""
         response = self.client.get('/api/correspondencias/?entregue_por=Correios')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(response.data['count'], 1)
-        for item in response.data['results']:
-            self.assertEqual(item['entregue_por'], "Correios")
+        self.assertGreaterEqual(response.data.get('count', 0), 1)
+        for item in response.data.get('results', []):
+            self.assertEqual(item.get('entregue_por'), "Correios")

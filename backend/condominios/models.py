@@ -2,12 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # 🏢 Modelo que representa um Condomínio
-# condominios/models.py (trecho)
 class Condominio(models.Model):
     nome = models.CharField(max_length=100)
     endereco = models.TextField()
-    
-    # 🆕 Campos adicionados para suportar filtragem
     cidade = models.CharField(max_length=100, blank=True, null=True)
     estado = models.CharField(max_length=2, blank=True, null=True)
     ativo = models.BooleanField(default=True)
@@ -16,8 +13,7 @@ class Condominio(models.Model):
         return self.nome
 
 
-
-# 🏠 Modelo que representa uma Unidade dentro de um Condomínio
+# 🏠 Unidade
 class Unidade(models.Model):
     numero = models.CharField(max_length=10)
     bloco = models.CharField(max_length=10, null=True, blank=True)
@@ -27,19 +23,27 @@ class Unidade(models.Model):
         return f"Apto {self.numero} - {self.condominio.nome}"
 
 
-# 👤 Modelo que representa um Morador
+# 👤 Morador
 class Morador(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='morador', null=True)
-
     nome = models.CharField(max_length=100)
+    sobrenome = models.CharField(max_length=100, blank=True)
     email = models.EmailField()
+    telefone = models.CharField(max_length=20, blank=True, null=True)
     unidade = models.ForeignKey(Unidade, on_delete=models.CASCADE, null=True, blank=True)
+    data_nascimento = models.DateField(null=True, blank=True)
+    foto = models.ImageField(upload_to='fotos_moradores/', null=True, blank=True)
+    cpf = models.CharField(max_length=14, blank=True, null=True)
+    rg = models.CharField(max_length=20, blank=True, null=True)
+    is_proprietario = models.BooleanField(default=False)
+    is_inquilino = models.BooleanField(default=False)
+    pode_votar = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nome
 
 
-# 🛠️ Modelo de Prestador de Serviço
+# 🚰 Prestador
 class Prestador(models.Model):
     nome = models.CharField(max_length=100)
     tipo_servico = models.CharField(max_length=100)
@@ -50,7 +54,7 @@ class Prestador(models.Model):
         return self.nome
 
 
-# 📢 Modelo de Ocorrência
+# 📢 Ocorrência
 class Ocorrencia(models.Model):
     STATUS_CHOICES = [
         ('aberta', 'Aberta'),
@@ -61,7 +65,7 @@ class Ocorrencia(models.Model):
     titulo = models.CharField(max_length=100)
     descricao = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='aberta')
-    criado_em = models.DateTimeField(auto_now_add=True)
+    data_registro = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
     morador = models.ForeignKey(Morador, on_delete=models.CASCADE)
     unidade = models.ForeignKey(Unidade, on_delete=models.CASCADE)
@@ -70,7 +74,7 @@ class Ocorrencia(models.Model):
         return f"{self.titulo} - {self.get_status_display()}"
 
 
-# 👥 Modelo de Visitante
+# 👥 Visitante
 class Visitante(models.Model):
     nome = models.CharField(max_length=100)
     documento = models.CharField(max_length=50)
@@ -137,14 +141,14 @@ class ReservaEspaco(models.Model):
     morador = models.ForeignKey(Morador, on_delete=models.CASCADE)
     unidade = models.ForeignKey(Unidade, on_delete=models.CASCADE)
     espaco = models.ForeignKey(EspacoComum, on_delete=models.CASCADE)
-    data_reserva = models.DateField()
+    data = models.DateField()
     horario_inicio = models.TimeField()
     horario_fim = models.TimeField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
     observacoes = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.espaco.nome} - {self.data_reserva} ({self.get_status_display()})"
+        return f"{self.espaco.nome} - {self.data} ({self.get_status_display()})"
 
 
 # 📂 Documentos
@@ -255,7 +259,7 @@ class ComprovantePagamento(models.Model):
         return f"Comprovante de {self.morador.nome} para {self.cobranca}"
 
 
-# 📆 Autorização Remota
+# 🗒️ Autorização Remota
 class AutorizacaoEntrada(models.Model):
     STATUS_CHOICES = [
         ('pendente', 'Pendente'),
@@ -296,7 +300,7 @@ class Auditoria(models.Model):
         return f"{self.entidade} #{self.objeto_id} - {self.get_tipo_acao_display()}"
 
 
-# 👨‍💼 Perfil do Usuário
+# 👨‍💻 Perfil do Usuário
 class PerfilUsuario(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     telefone = models.CharField(max_length=20, blank=True)

@@ -1,45 +1,35 @@
 from django.contrib import admin
 from django.urls import path, include
 
-# ─────────────────────────────────────────────────────────────
-# 🔒 Autenticação JWT
-# ─────────────────────────────────────────────────────────────
+# 🔒 Autenticação via JWT
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
 
-# ─────────────────────────────────────────────────────────────
-# 📄 Documentação da API com Swagger e Redoc
-# ─────────────────────────────────────────────────────────────
+# 📘 Documentação da API (Swagger e Redoc)
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
     SpectacularRedocView,
 )
 
-# ─────────────────────────────────────────────────────────────
-# 🌐 URLs principais do projeto
-# ─────────────────────────────────────────────────────────────
 urlpatterns = [
-    path('admin/', admin.site.urls),  # Admin padrão do Django
-    path('api/', include('condominios.urls')),  # Rotas da aplicação principal
-]
+    # Admin do Django
+    path('admin/', admin.site.urls),
 
-# ─────────────────────────────────────────────────────────────
-# 🔐 Rotas de autenticação JWT
-# ─────────────────────────────────────────────────────────────
-urlpatterns += [
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),       # Geração de token
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),      # Renovação de token
-]
+    # API principal
+    path('api/', include('condominios.urls')),
 
-# ─────────────────────────────────────────────────────────────
-# 📘 Rotas da documentação interativa da API
-# ─────────────────────────────────────────────────────────────
-urlpatterns += [
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),                      # Schema OpenAPI
-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),  # Swagger UI
-    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),         # Redoc
+    # Cadastro e aprovação de usuários
+    path('api/usuarios/', include('condominios.urls_cadastro_aprovacao')),
+
+    # 🔐 JWT Auth endpoints
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    # 📘 Documentação Swagger e Redoc
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
-path('api/usuarios/', include('condominios.urls_cadastro_aprovacao')),

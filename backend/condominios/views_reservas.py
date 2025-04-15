@@ -26,7 +26,7 @@ class EspacoComumViewSet(viewsets.ModelViewSet):
 # Permite que moradores reservem espaços e visualizem suas reservas
 # ─────────────────────────────────────────────────────────────
 class ReservaEspacoViewSet(viewsets.ModelViewSet):
-    queryset = ReservaEspaco.objects.all().order_by('-data_reserva')
+    queryset = ReservaEspaco.objects.all().order_by('-data')  # campo correto do model
     serializer_class = ReservaEspacoSerializer
     permission_classes = get_viewset_permissions('ReservaEspacoViewSet')
 
@@ -36,8 +36,8 @@ class ReservaEspacoViewSet(viewsets.ModelViewSet):
         'morador',         # Ex: ?morador=1
         'unidade',         # Ex: ?unidade=2
         'espaco',          # Ex: ?espaco=5
-        'data_reserva',    # Ex: ?data_reserva=2025-04-20
+        'data',    # Ex: ?data_reserva=2025-04-20
         'status'           # Ex: ?status=pendente
     ]
-    ordering_fields = ['data_reserva', 'horario_inicio']   # Ex: ?ordering=data_reserva
+    ordering_fields = ['data', 'horario_inicio']   # Ex: ?ordering=data_reserva
     search_fields = ['observacoes']                        # Ex: ?search=aniversario

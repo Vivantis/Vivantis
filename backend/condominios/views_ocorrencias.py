@@ -9,7 +9,7 @@ from .permissions import get_viewset_permissions  # 🔐 Importa as permissões 
 # Permite moradores registrarem problemas e administradores acompanharem
 # ─────────────────────────────────────────────────────────────
 class OcorrenciaViewSet(viewsets.ModelViewSet):
-    queryset = Ocorrencia.objects.all().order_by('-criado_em')
+    queryset = Ocorrencia.objects.all().order_by('-data_registro')
     serializer_class = OcorrenciaSerializer
     permission_classes = get_viewset_permissions('OcorrenciaViewSet')
 

@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'drf_spectacular_sidecar',
+    'django_filters',
 ]
 
 # ───────────────────────────────
@@ -123,24 +124,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 🔧 Django REST Framework
 # ───────────────────────────────
 REST_FRAMEWORK = {
-    # Autenticação via JWT
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-
-    # Permissões padrão
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-
-    # Esquema para Swagger via drf-spectacular
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-
-    # Paginação global
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
-
-    # Filtros globais (search, ordering, filtros customizados)
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.OrderingFilter',

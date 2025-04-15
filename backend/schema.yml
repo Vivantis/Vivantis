@@ -1,0 +1,5158 @@
+openapi: 3.0.3
+info:
+  title: Vivantis API
+  version: 1.0.0
+  description: Documentação interativa da API do sistema de gestão de condomínio com
+    autenticação JWT.
+paths:
+  /api/acessos/:
+    get:
+      operationId: api_acessos_list
+      parameters:
+      - in: query
+        name: morador
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: prestador
+        schema:
+          type: integer
+      - in: query
+        name: tipo
+        schema:
+          type: string
+          enum:
+          - morador
+          - prestador
+          - visitante
+        description: |-
+          * `morador` - Morador
+          * `visitante` - Visitante
+          * `prestador` - Prestador
+      - in: query
+        name: unidade
+        schema:
+          type: integer
+      - in: query
+        name: visitante
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedControleAcessoList'
+          description: ''
+    post:
+      operationId: api_acessos_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ControleAcessoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ControleAcessoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ControleAcessoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ControleAcesso'
+          description: ''
+  /api/acessos/{id}/:
+    get:
+      operationId: api_acessos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this controle acesso.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ControleAcesso'
+          description: ''
+    put:
+      operationId: api_acessos_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this controle acesso.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ControleAcessoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ControleAcessoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ControleAcessoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ControleAcesso'
+          description: ''
+    patch:
+      operationId: api_acessos_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this controle acesso.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedControleAcessoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedControleAcessoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedControleAcessoRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ControleAcesso'
+          description: ''
+    delete:
+      operationId: api_acessos_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this controle acesso.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/administradores/:
+    get:
+      operationId: api_administradores_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAdministradorGeralList'
+          description: ''
+    post:
+      operationId: api_administradores_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdministradorGeralRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdministradorGeralRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdministradorGeralRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdministradorGeral'
+          description: ''
+  /api/administradores/{id}/:
+    get:
+      operationId: api_administradores_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this administrador geral.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdministradorGeral'
+          description: ''
+    put:
+      operationId: api_administradores_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this administrador geral.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdministradorGeralRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdministradorGeralRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdministradorGeralRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdministradorGeral'
+          description: ''
+    patch:
+      operationId: api_administradores_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this administrador geral.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdministradorGeralRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdministradorGeralRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdministradorGeralRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdministradorGeral'
+          description: ''
+    delete:
+      operationId: api_administradores_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this administrador geral.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/auditoria/:
+    get:
+      operationId: api_auditoria_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuditoriaList'
+          description: ''
+  /api/auditoria/{id}/:
+    get:
+      operationId: api_auditoria_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this auditoria.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auditoria'
+          description: ''
+  /api/autorizacoes/:
+    get:
+      operationId: api_autorizacoes_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAutorizacaoEntradaList'
+          description: ''
+    post:
+      operationId: api_autorizacoes_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutorizacaoEntradaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AutorizacaoEntradaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AutorizacaoEntradaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutorizacaoEntrada'
+          description: ''
+  /api/autorizacoes/{id}/:
+    get:
+      operationId: api_autorizacoes_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this autorizacao entrada.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutorizacaoEntrada'
+          description: ''
+    put:
+      operationId: api_autorizacoes_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this autorizacao entrada.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutorizacaoEntradaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AutorizacaoEntradaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AutorizacaoEntradaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutorizacaoEntrada'
+          description: ''
+    patch:
+      operationId: api_autorizacoes_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this autorizacao entrada.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAutorizacaoEntradaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAutorizacaoEntradaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAutorizacaoEntradaRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutorizacaoEntrada'
+          description: ''
+    delete:
+      operationId: api_autorizacoes_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this autorizacao entrada.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/avisos/:
+    get:
+      operationId: api_avisos_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAvisoList'
+          description: ''
+    post:
+      operationId: api_avisos_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvisoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AvisoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AvisoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Aviso'
+          description: ''
+  /api/avisos/{id}/:
+    get:
+      operationId: api_avisos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this aviso.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Aviso'
+          description: ''
+    put:
+      operationId: api_avisos_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this aviso.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvisoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AvisoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AvisoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Aviso'
+          description: ''
+    patch:
+      operationId: api_avisos_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this aviso.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAvisoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAvisoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAvisoRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Aviso'
+          description: ''
+    delete:
+      operationId: api_avisos_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this aviso.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/cadastro/:
+    post:
+      operationId: api_cadastro_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/cadastro/aprovar/{id}/:
+    patch:
+      operationId: api_cadastro_aprovar_partial_update
+      description: Ativa a conta de um usuário inativo.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/cobrancas/:
+    get:
+      operationId: api_cobrancas_list
+      parameters:
+      - in: query
+        name: morador
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - atrasado
+          - pago
+          - pendente
+        description: |-
+          * `pendente` - Pendente
+          * `pago` - Pago
+          * `atrasado` - Atrasado
+      - in: query
+        name: tipo
+        schema:
+          type: string
+          enum:
+          - extraordinaria
+          - fundo_reserva
+          - mensalidade
+          - outro
+        description: |-
+          * `mensalidade` - Mensalidade
+          * `fundo_reserva` - Fundo de Reserva
+          * `extraordinaria` - Extraordinária
+          * `outro` - Outro
+      - in: query
+        name: unidade
+        schema:
+          type: integer
+      - in: query
+        name: vencimento
+        schema:
+          type: string
+          format: date
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCobrancaList'
+          description: ''
+    post:
+      operationId: api_cobrancas_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CobrancaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CobrancaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CobrancaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cobranca'
+          description: ''
+  /api/cobrancas/{id}/:
+    get:
+      operationId: api_cobrancas_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cobranca.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cobranca'
+          description: ''
+    put:
+      operationId: api_cobrancas_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cobranca.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CobrancaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CobrancaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CobrancaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cobranca'
+          description: ''
+    patch:
+      operationId: api_cobrancas_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cobranca.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCobrancaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCobrancaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCobrancaRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cobranca'
+          description: ''
+    delete:
+      operationId: api_cobrancas_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cobranca.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/comprovantes/:
+    get:
+      operationId: api_comprovantes_list
+      description: |-
+        ViewSet para gerenciamento de Comprovantes de Pagamento.
+        Permite listar, criar, editar e excluir comprovantes.
+        Inclui filtros, busca e ordenação.
+      parameters:
+      - in: query
+        name: cobranca
+        schema:
+          type: integer
+      - in: query
+        name: morador
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: validado
+        schema:
+          type: boolean
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedComprovantePagamentoList'
+          description: ''
+    post:
+      operationId: api_comprovantes_create
+      description: |-
+        ViewSet para gerenciamento de Comprovantes de Pagamento.
+        Permite listar, criar, editar e excluir comprovantes.
+        Inclui filtros, busca e ordenação.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComprovantePagamentoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ComprovantePagamentoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ComprovantePagamentoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComprovantePagamento'
+          description: ''
+  /api/comprovantes/{id}/:
+    get:
+      operationId: api_comprovantes_retrieve
+      description: |-
+        ViewSet para gerenciamento de Comprovantes de Pagamento.
+        Permite listar, criar, editar e excluir comprovantes.
+        Inclui filtros, busca e ordenação.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this comprovante pagamento.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComprovantePagamento'
+          description: ''
+    put:
+      operationId: api_comprovantes_update
+      description: |-
+        ViewSet para gerenciamento de Comprovantes de Pagamento.
+        Permite listar, criar, editar e excluir comprovantes.
+        Inclui filtros, busca e ordenação.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this comprovante pagamento.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComprovantePagamentoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ComprovantePagamentoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ComprovantePagamentoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComprovantePagamento'
+          description: ''
+    patch:
+      operationId: api_comprovantes_partial_update
+      description: |-
+        ViewSet para gerenciamento de Comprovantes de Pagamento.
+        Permite listar, criar, editar e excluir comprovantes.
+        Inclui filtros, busca e ordenação.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this comprovante pagamento.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedComprovantePagamentoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedComprovantePagamentoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedComprovantePagamentoRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComprovantePagamento'
+          description: ''
+    delete:
+      operationId: api_comprovantes_destroy
+      description: |-
+        ViewSet para gerenciamento de Comprovantes de Pagamento.
+        Permite listar, criar, editar e excluir comprovantes.
+        Inclui filtros, busca e ordenação.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this comprovante pagamento.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/condominios/:
+    get:
+      operationId: api_condominios_list
+      parameters:
+      - in: query
+        name: ativo
+        schema:
+          type: boolean
+      - in: query
+        name: cidade
+        schema:
+          type: string
+      - in: query
+        name: estado
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCondominioList'
+          description: ''
+    post:
+      operationId: api_condominios_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CondominioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CondominioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CondominioRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Condominio'
+          description: ''
+  /api/condominios/{id}/:
+    get:
+      operationId: api_condominios_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this condominio.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Condominio'
+          description: ''
+    put:
+      operationId: api_condominios_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this condominio.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CondominioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CondominioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CondominioRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Condominio'
+          description: ''
+    patch:
+      operationId: api_condominios_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this condominio.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCondominioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCondominioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCondominioRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Condominio'
+          description: ''
+    delete:
+      operationId: api_condominios_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this condominio.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/correspondencias/:
+    get:
+      operationId: api_correspondencias_list
+      parameters:
+      - in: query
+        name: data_recebimento
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: data_retirada
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: descricao
+        schema:
+          type: string
+      - in: query
+        name: entregue_por
+        schema:
+          type: string
+      - in: query
+        name: morador
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: unidade
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCorrespondenciaList'
+          description: ''
+    post:
+      operationId: api_correspondencias_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorrespondenciaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CorrespondenciaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CorrespondenciaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Correspondencia'
+          description: ''
+  /api/correspondencias/{id}/:
+    get:
+      operationId: api_correspondencias_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this correspondencia.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Correspondencia'
+          description: ''
+    put:
+      operationId: api_correspondencias_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this correspondencia.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorrespondenciaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CorrespondenciaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CorrespondenciaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Correspondencia'
+          description: ''
+    patch:
+      operationId: api_correspondencias_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this correspondencia.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCorrespondenciaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCorrespondenciaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCorrespondenciaRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Correspondencia'
+          description: ''
+    delete:
+      operationId: api_correspondencias_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this correspondencia.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/documentos/:
+    get:
+      operationId: api_documentos_list
+      parameters:
+      - in: query
+        name: condominio
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: tipo
+        schema:
+          type: string
+          enum:
+          - ata
+          - boleto
+          - edital
+          - outro
+          - regulamento
+        description: |-
+          * `regulamento` - Regulamento Interno
+          * `ata` - Ata de Reunião
+          * `edital` - Edital
+          * `boleto` - Boleto
+          * `outro` - Outro
+      - in: query
+        name: visivel_para_moradores
+        schema:
+          type: boolean
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDocumentoList'
+          description: ''
+    post:
+      operationId: api_documentos_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DocumentoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Documento'
+          description: ''
+  /api/documentos/{id}/:
+    get:
+      operationId: api_documentos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this documento.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Documento'
+          description: ''
+    put:
+      operationId: api_documentos_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this documento.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DocumentoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Documento'
+          description: ''
+    patch:
+      operationId: api_documentos_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this documento.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentoRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Documento'
+          description: ''
+    delete:
+      operationId: api_documentos_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this documento.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/espacos/:
+    get:
+      operationId: api_espacos_list
+      parameters:
+      - in: query
+        name: condominio
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEspacoComumList'
+          description: ''
+    post:
+      operationId: api_espacos_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EspacoComumRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EspacoComumRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EspacoComumRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EspacoComum'
+          description: ''
+  /api/espacos/{id}/:
+    get:
+      operationId: api_espacos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this espaco comum.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EspacoComum'
+          description: ''
+    put:
+      operationId: api_espacos_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this espaco comum.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EspacoComumRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EspacoComumRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EspacoComumRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EspacoComum'
+          description: ''
+    patch:
+      operationId: api_espacos_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this espaco comum.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEspacoComumRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEspacoComumRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEspacoComumRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EspacoComum'
+          description: ''
+    delete:
+      operationId: api_espacos_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this espaco comum.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/manutencao/:
+    get:
+      operationId: api_manutencao_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedManutencaoList'
+          description: ''
+    post:
+      operationId: api_manutencao_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManutencaoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ManutencaoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ManutencaoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manutencao'
+          description: ''
+  /api/manutencao/{id}/:
+    get:
+      operationId: api_manutencao_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this manutencao.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manutencao'
+          description: ''
+    put:
+      operationId: api_manutencao_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this manutencao.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManutencaoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ManutencaoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ManutencaoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manutencao'
+          description: ''
+    patch:
+      operationId: api_manutencao_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this manutencao.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedManutencaoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedManutencaoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedManutencaoRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manutencao'
+          description: ''
+    delete:
+      operationId: api_manutencao_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this manutencao.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/moradores/:
+    get:
+      operationId: api_moradores_list
+      parameters:
+      - in: query
+        name: email
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: unidade
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMoradorList'
+          description: ''
+    post:
+      operationId: api_moradores_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoradorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MoradorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MoradorRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Morador'
+          description: ''
+  /api/moradores/{id}/:
+    get:
+      operationId: api_moradores_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this morador.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Morador'
+          description: ''
+    put:
+      operationId: api_moradores_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this morador.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoradorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MoradorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MoradorRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Morador'
+          description: ''
+    patch:
+      operationId: api_moradores_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this morador.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMoradorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMoradorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMoradorRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Morador'
+          description: ''
+    delete:
+      operationId: api_moradores_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this morador.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/moradores/{id}/aprovar/:
+    post:
+      operationId: api_moradores_aprovar_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this morador.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoradorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MoradorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MoradorRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Morador'
+          description: ''
+  /api/moradores/{id}/delegar-voto/:
+    patch:
+      operationId: api_moradores_delegar_voto_partial_update
+      description: |-
+        Permite que um admin/síndico altere o campo pode_votar de um morador.
+        Body esperado: { "pode_votar": true/false }
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this morador.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMoradorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMoradorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMoradorRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Morador'
+          description: ''
+  /api/ocorrencias/:
+    get:
+      operationId: api_ocorrencias_list
+      parameters:
+      - in: query
+        name: morador
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - aberta
+          - em_andamento
+          - resolvida
+        description: |-
+          * `aberta` - Aberta
+          * `em_andamento` - Em andamento
+          * `resolvida` - Resolvida
+      - in: query
+        name: unidade
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOcorrenciaList'
+          description: ''
+    post:
+      operationId: api_ocorrencias_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OcorrenciaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OcorrenciaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OcorrenciaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ocorrencia'
+          description: ''
+  /api/ocorrencias/{id}/:
+    get:
+      operationId: api_ocorrencias_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ocorrencia.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ocorrencia'
+          description: ''
+    put:
+      operationId: api_ocorrencias_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ocorrencia.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OcorrenciaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OcorrenciaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OcorrenciaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ocorrencia'
+          description: ''
+    patch:
+      operationId: api_ocorrencias_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ocorrencia.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOcorrenciaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOcorrenciaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOcorrenciaRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ocorrencia'
+          description: ''
+    delete:
+      operationId: api_ocorrencias_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ocorrencia.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/perfil/:
+    get:
+      operationId: api_perfil_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerfilUsuario'
+          description: ''
+    put:
+      operationId: api_perfil_update
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PerfilUsuarioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PerfilUsuarioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PerfilUsuarioRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerfilUsuario'
+          description: ''
+    patch:
+      operationId: api_perfil_partial_update
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPerfilUsuarioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPerfilUsuarioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPerfilUsuarioRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerfilUsuario'
+          description: ''
+  /api/prestadores/:
+    get:
+      operationId: api_prestadores_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPrestadorList'
+          description: ''
+    post:
+      operationId: api_prestadores_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrestadorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PrestadorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PrestadorRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prestador'
+          description: ''
+  /api/prestadores/{id}/:
+    get:
+      operationId: api_prestadores_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this prestador.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prestador'
+          description: ''
+    put:
+      operationId: api_prestadores_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this prestador.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrestadorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PrestadorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PrestadorRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prestador'
+          description: ''
+    patch:
+      operationId: api_prestadores_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this prestador.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPrestadorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPrestadorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPrestadorRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prestador'
+          description: ''
+    delete:
+      operationId: api_prestadores_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this prestador.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/relatorios/geral/:
+    get:
+      operationId: api_relatorios_geral_retrieve
+      description: Retorna contagens e estatísticas agregadas do sistema
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioGeral'
+          description: ''
+  /api/reservas/:
+    get:
+      operationId: api_reservas_list
+      parameters:
+      - in: query
+        name: data
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: espaco
+        schema:
+          type: integer
+      - in: query
+        name: morador
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - aprovado
+          - cancelado
+          - pendente
+        description: |-
+          * `pendente` - Pendente
+          * `aprovado` - Aprovado
+          * `cancelado` - Cancelado
+      - in: query
+        name: unidade
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReservaEspacoList'
+          description: ''
+    post:
+      operationId: api_reservas_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservaEspacoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReservaEspacoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReservaEspacoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservaEspaco'
+          description: ''
+  /api/reservas/{id}/:
+    get:
+      operationId: api_reservas_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this reserva espaco.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservaEspaco'
+          description: ''
+    put:
+      operationId: api_reservas_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this reserva espaco.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservaEspacoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReservaEspacoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReservaEspacoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservaEspaco'
+          description: ''
+    patch:
+      operationId: api_reservas_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this reserva espaco.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReservaEspacoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReservaEspacoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReservaEspacoRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservaEspaco'
+          description: ''
+    delete:
+      operationId: api_reservas_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this reserva espaco.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/token/:
+    post:
+      operationId: api_token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/token/refresh/:
+    post:
+      operationId: api_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/unidades/:
+    get:
+      operationId: api_unidades_list
+      parameters:
+      - in: query
+        name: bloco
+        schema:
+          type: string
+      - in: query
+        name: condominio
+        schema:
+          type: integer
+      - in: query
+        name: numero
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUnidadeList'
+          description: ''
+    post:
+      operationId: api_unidades_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnidadeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UnidadeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UnidadeRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unidade'
+          description: ''
+  /api/unidades/{id}/:
+    get:
+      operationId: api_unidades_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this unidade.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unidade'
+          description: ''
+    put:
+      operationId: api_unidades_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this unidade.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnidadeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UnidadeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UnidadeRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unidade'
+          description: ''
+    patch:
+      operationId: api_unidades_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this unidade.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUnidadeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUnidadeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUnidadeRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unidade'
+          description: ''
+    delete:
+      operationId: api_unidades_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this unidade.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/usuarios/cadastro/:
+    post:
+      operationId: api_usuarios_cadastro_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/usuarios/cadastro/aprovar/{id}/:
+    patch:
+      operationId: api_usuarios_cadastro_aprovar_partial_update
+      description: Ativa a conta de um usuário inativo.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/visitantes/:
+    get:
+      operationId: api_visitantes_list
+      parameters:
+      - in: query
+        name: documento
+        schema:
+          type: string
+      - in: query
+        name: morador_responsavel
+        schema:
+          type: integer
+      - in: query
+        name: nome
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: unidade
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVisitanteList'
+          description: ''
+    post:
+      operationId: api_visitantes_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitanteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VisitanteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VisitanteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visitante'
+          description: ''
+  /api/visitantes/{id}/:
+    get:
+      operationId: api_visitantes_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this visitante.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visitante'
+          description: ''
+    put:
+      operationId: api_visitantes_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this visitante.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitanteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VisitanteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VisitanteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visitante'
+          description: ''
+    patch:
+      operationId: api_visitantes_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this visitante.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVisitanteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVisitanteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVisitanteRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visitante'
+          description: ''
+    delete:
+      operationId: api_visitantes_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this visitante.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AdministradorGeral:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 100
+        telefone:
+          type: string
+          maxLength: 20
+        criado_em:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+      required:
+      - criado_em
+      - id
+      - nome
+      - user
+    AdministradorGeralRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        telefone:
+          type: string
+          maxLength: 20
+        user:
+          type: integer
+      required:
+      - nome
+      - user
+    Auditoria:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        usuario:
+          type: string
+          readOnly: true
+        tipo_acao:
+          $ref: '#/components/schemas/TipoAcaoEnum'
+        entidade:
+          type: string
+          maxLength: 100
+        objeto_id:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        descricao:
+          type: string
+        data:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - data
+      - descricao
+      - entidade
+      - id
+      - objeto_id
+      - tipo_acao
+      - usuario
+    AutorizacaoEntrada:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome_visitante:
+          type: string
+          maxLength: 100
+        documento_visitante:
+          type: string
+          maxLength: 50
+        status:
+          $ref: '#/components/schemas/AutorizacaoEntradaStatusEnum'
+        criado_em:
+          type: string
+          format: date-time
+          readOnly: true
+        respondido_em:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        observacoes:
+          type: string
+        unidade_destino:
+          type: integer
+        respondido_por:
+          type: integer
+          readOnly: true
+          nullable: true
+        criado_por:
+          type: integer
+          readOnly: true
+          nullable: true
+      required:
+      - criado_em
+      - criado_por
+      - documento_visitante
+      - id
+      - nome_visitante
+      - respondido_em
+      - respondido_por
+      - unidade_destino
+    AutorizacaoEntradaRequest:
+      type: object
+      properties:
+        nome_visitante:
+          type: string
+          minLength: 1
+          maxLength: 100
+        documento_visitante:
+          type: string
+          minLength: 1
+          maxLength: 50
+        status:
+          $ref: '#/components/schemas/AutorizacaoEntradaStatusEnum'
+        observacoes:
+          type: string
+        unidade_destino:
+          type: integer
+      required:
+      - documento_visitante
+      - nome_visitante
+      - unidade_destino
+    AutorizacaoEntradaStatusEnum:
+      enum:
+      - pendente
+      - aprovada
+      - recusada
+      type: string
+      description: |-
+        * `pendente` - Pendente
+        * `aprovada` - Aprovada
+        * `recusada` - Recusada
+    Aviso:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        titulo:
+          type: string
+          maxLength: 150
+        mensagem:
+          type: string
+        criado_em:
+          type: string
+          format: date-time
+          readOnly: true
+        expira_em:
+          type: string
+          format: date-time
+          nullable: true
+        condominio:
+          type: integer
+        publicado_por:
+          type: integer
+          nullable: true
+      required:
+      - condominio
+      - criado_em
+      - id
+      - mensagem
+      - titulo
+    AvisoRequest:
+      type: object
+      properties:
+        titulo:
+          type: string
+          minLength: 1
+          maxLength: 150
+        mensagem:
+          type: string
+          minLength: 1
+        expira_em:
+          type: string
+          format: date-time
+          nullable: true
+        condominio:
+          type: integer
+        publicado_por:
+          type: integer
+          nullable: true
+      required:
+      - condominio
+      - mensagem
+      - titulo
+    Cobranca:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        tipo:
+          $ref: '#/components/schemas/CobrancaTipoEnum'
+        descricao:
+          type: string
+          maxLength: 200
+        valor:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        vencimento:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/CobrancaStatusEnum'
+        criado_em:
+          type: string
+          format: date-time
+          readOnly: true
+        atualizado_em:
+          type: string
+          format: date-time
+          readOnly: true
+        unidade:
+          type: integer
+        morador:
+          type: integer
+          nullable: true
+      required:
+      - atualizado_em
+      - criado_em
+      - id
+      - unidade
+      - valor
+      - vencimento
+    CobrancaRequest:
+      type: object
+      properties:
+        tipo:
+          $ref: '#/components/schemas/CobrancaTipoEnum'
+        descricao:
+          type: string
+          maxLength: 200
+        valor:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        vencimento:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/CobrancaStatusEnum'
+        unidade:
+          type: integer
+        morador:
+          type: integer
+          nullable: true
+      required:
+      - unidade
+      - valor
+      - vencimento
+    CobrancaStatusEnum:
+      enum:
+      - pendente
+      - pago
+      - atrasado
+      type: string
+      description: |-
+        * `pendente` - Pendente
+        * `pago` - Pago
+        * `atrasado` - Atrasado
+    CobrancaTipoEnum:
+      enum:
+      - mensalidade
+      - fundo_reserva
+      - extraordinaria
+      - outro
+      type: string
+      description: |-
+        * `mensalidade` - Mensalidade
+        * `fundo_reserva` - Fundo de Reserva
+        * `extraordinaria` - Extraordinária
+        * `outro` - Outro
+    ComprovantePagamento:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        arquivo:
+          type: string
+          format: uri
+        comentario:
+          type: string
+        data_envio:
+          type: string
+          format: date-time
+          readOnly: true
+        validado:
+          type: boolean
+        cobranca:
+          type: integer
+        morador:
+          type: integer
+        validado_por:
+          type: integer
+          nullable: true
+      required:
+      - arquivo
+      - cobranca
+      - data_envio
+      - id
+      - morador
+    ComprovantePagamentoRequest:
+      type: object
+      properties:
+        arquivo:
+          type: string
+          format: binary
+        comentario:
+          type: string
+        validado:
+          type: boolean
+        cobranca:
+          type: integer
+        morador:
+          type: integer
+        validado_por:
+          type: integer
+          nullable: true
+      required:
+      - arquivo
+      - cobranca
+      - morador
+    Condominio:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 100
+        endereco:
+          type: string
+        cidade:
+          type: string
+          nullable: true
+          maxLength: 100
+        estado:
+          type: string
+          nullable: true
+          maxLength: 2
+        ativo:
+          type: boolean
+      required:
+      - endereco
+      - id
+      - nome
+    CondominioRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        endereco:
+          type: string
+          minLength: 1
+        cidade:
+          type: string
+          nullable: true
+          maxLength: 100
+        estado:
+          type: string
+          nullable: true
+          maxLength: 2
+        ativo:
+          type: boolean
+      required:
+      - endereco
+      - nome
+    ControleAcesso:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        tipo:
+          $ref: '#/components/schemas/ControleAcessoTipoEnum'
+        data_entrada:
+          type: string
+          format: date-time
+          readOnly: true
+        data_saida:
+          type: string
+          format: date-time
+          nullable: true
+        observacoes:
+          type: string
+        morador:
+          type: integer
+          nullable: true
+        visitante:
+          type: integer
+          nullable: true
+        prestador:
+          type: integer
+          nullable: true
+        unidade:
+          type: integer
+          nullable: true
+      required:
+      - data_entrada
+      - id
+      - tipo
+    ControleAcessoRequest:
+      type: object
+      properties:
+        tipo:
+          $ref: '#/components/schemas/ControleAcessoTipoEnum'
+        data_saida:
+          type: string
+          format: date-time
+          nullable: true
+        observacoes:
+          type: string
+        morador:
+          type: integer
+          nullable: true
+        visitante:
+          type: integer
+          nullable: true
+        prestador:
+          type: integer
+          nullable: true
+        unidade:
+          type: integer
+          nullable: true
+      required:
+      - tipo
+    ControleAcessoTipoEnum:
+      enum:
+      - morador
+      - visitante
+      - prestador
+      type: string
+      description: |-
+        * `morador` - Morador
+        * `visitante` - Visitante
+        * `prestador` - Prestador
+    Correspondencia:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        morador:
+          type: integer
+        descricao:
+          type: string
+          maxLength: 200
+        data_recebimento:
+          type: string
+          format: date-time
+          readOnly: true
+        data_retirada:
+          type: string
+          format: date-time
+          nullable: true
+        nome_morador:
+          type: string
+          readOnly: true
+        retirada_display:
+          type: string
+          readOnly: true
+      required:
+      - data_recebimento
+      - descricao
+      - id
+      - morador
+      - nome_morador
+      - retirada_display
+    CorrespondenciaRequest:
+      type: object
+      properties:
+        morador:
+          type: integer
+        descricao:
+          type: string
+          minLength: 1
+          maxLength: 200
+        data_retirada:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - descricao
+      - morador
+    Documento:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        titulo:
+          type: string
+          maxLength: 200
+        tipo:
+          $ref: '#/components/schemas/DocumentoTipoEnum'
+        arquivo:
+          type: string
+          format: uri
+        visivel_para_moradores:
+          type: boolean
+        data_envio:
+          type: string
+          format: date-time
+          readOnly: true
+        enviado_por:
+          type: integer
+          nullable: true
+        condominio:
+          type: integer
+      required:
+      - arquivo
+      - condominio
+      - data_envio
+      - id
+      - titulo
+    DocumentoRequest:
+      type: object
+      properties:
+        titulo:
+          type: string
+          minLength: 1
+          maxLength: 200
+        tipo:
+          $ref: '#/components/schemas/DocumentoTipoEnum'
+        arquivo:
+          type: string
+          format: binary
+        visivel_para_moradores:
+          type: boolean
+        enviado_por:
+          type: integer
+          nullable: true
+        condominio:
+          type: integer
+      required:
+      - arquivo
+      - condominio
+      - titulo
+    DocumentoTipoEnum:
+      enum:
+      - regulamento
+      - ata
+      - edital
+      - boleto
+      - outro
+      type: string
+      description: |-
+        * `regulamento` - Regulamento Interno
+        * `ata` - Ata de Reunião
+        * `edital` - Edital
+        * `boleto` - Boleto
+        * `outro` - Outro
+    EspacoComum:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 100
+        condominio:
+          type: integer
+      required:
+      - condominio
+      - id
+      - nome
+    EspacoComumRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        condominio:
+          type: integer
+      required:
+      - condominio
+      - nome
+    Manutencao:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        titulo:
+          type: string
+          maxLength: 150
+        descricao:
+          type: string
+        data_inicio:
+          type: string
+          format: date-time
+        data_fim:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/ManutencaoStatusEnum'
+        condominio:
+          type: integer
+        criado_por:
+          type: integer
+      required:
+      - condominio
+      - criado_por
+      - data_fim
+      - data_inicio
+      - descricao
+      - id
+      - titulo
+    ManutencaoRequest:
+      type: object
+      properties:
+        titulo:
+          type: string
+          minLength: 1
+          maxLength: 150
+        descricao:
+          type: string
+          minLength: 1
+        data_inicio:
+          type: string
+          format: date-time
+        data_fim:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/ManutencaoStatusEnum'
+        condominio:
+          type: integer
+        criado_por:
+          type: integer
+      required:
+      - condominio
+      - criado_por
+      - data_fim
+      - data_inicio
+      - descricao
+      - titulo
+    ManutencaoStatusEnum:
+      enum:
+      - planejada
+      - em_andamento
+      - concluida
+      type: string
+      description: |-
+        * `planejada` - Planejada
+        * `em_andamento` - Em andamento
+        * `concluida` - Concluída
+    Morador:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        unidade:
+          type: integer
+          nullable: true
+        cpf:
+          type: string
+          nullable: true
+          maxLength: 14
+        rg:
+          type: string
+          nullable: true
+          maxLength: 20
+        nome_completo:
+          type: string
+          readOnly: true
+        is_proprietario:
+          type: boolean
+        is_inquilino:
+          type: boolean
+        pode_votar:
+          type: boolean
+        pode_votar_display:
+          type: string
+          readOnly: true
+      required:
+      - email
+      - id
+      - nome
+      - nome_completo
+      - pode_votar_display
+    MoradorRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        unidade:
+          type: integer
+          nullable: true
+        cpf:
+          type: string
+          nullable: true
+          maxLength: 14
+        rg:
+          type: string
+          nullable: true
+          maxLength: 20
+        is_proprietario:
+          type: boolean
+        is_inquilino:
+          type: boolean
+        pode_votar:
+          type: boolean
+      required:
+      - email
+      - nome
+    Ocorrencia:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        titulo:
+          type: string
+          maxLength: 100
+        morador:
+          type: integer
+        descricao:
+          type: string
+        status:
+          $ref: '#/components/schemas/OcorrenciaStatusEnum'
+        atualizado_em:
+          type: string
+          format: date-time
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+      required:
+      - atualizado_em
+      - descricao
+      - id
+      - morador
+      - status_display
+      - titulo
+    OcorrenciaRequest:
+      type: object
+      properties:
+        titulo:
+          type: string
+          minLength: 1
+          maxLength: 100
+        morador:
+          type: integer
+        descricao:
+          type: string
+          minLength: 1
+        status:
+          $ref: '#/components/schemas/OcorrenciaStatusEnum'
+      required:
+      - descricao
+      - morador
+      - titulo
+    OcorrenciaStatusEnum:
+      enum:
+      - aberta
+      - em_andamento
+      - resolvida
+      type: string
+      description: |-
+        * `aberta` - Aberta
+        * `em_andamento` - Em andamento
+        * `resolvida` - Resolvida
+    PaginatedAdministradorGeralList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdministradorGeral'
+    PaginatedAuditoriaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Auditoria'
+    PaginatedAutorizacaoEntradaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutorizacaoEntrada'
+    PaginatedAvisoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Aviso'
+    PaginatedCobrancaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cobranca'
+    PaginatedComprovantePagamentoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComprovantePagamento'
+    PaginatedCondominioList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Condominio'
+    PaginatedControleAcessoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ControleAcesso'
+    PaginatedCorrespondenciaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Correspondencia'
+    PaginatedDocumentoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Documento'
+    PaginatedEspacoComumList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EspacoComum'
+    PaginatedManutencaoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Manutencao'
+    PaginatedMoradorList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morador'
+    PaginatedOcorrenciaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ocorrencia'
+    PaginatedPrestadorList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Prestador'
+    PaginatedReservaEspacoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReservaEspaco'
+    PaginatedUnidadeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Unidade'
+    PaginatedVisitanteList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Visitante'
+    PatchedAdministradorGeralRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        telefone:
+          type: string
+          maxLength: 20
+        user:
+          type: integer
+    PatchedAutorizacaoEntradaRequest:
+      type: object
+      properties:
+        nome_visitante:
+          type: string
+          minLength: 1
+          maxLength: 100
+        documento_visitante:
+          type: string
+          minLength: 1
+          maxLength: 50
+        status:
+          $ref: '#/components/schemas/AutorizacaoEntradaStatusEnum'
+        observacoes:
+          type: string
+        unidade_destino:
+          type: integer
+    PatchedAvisoRequest:
+      type: object
+      properties:
+        titulo:
+          type: string
+          minLength: 1
+          maxLength: 150
+        mensagem:
+          type: string
+          minLength: 1
+        expira_em:
+          type: string
+          format: date-time
+          nullable: true
+        condominio:
+          type: integer
+        publicado_por:
+          type: integer
+          nullable: true
+    PatchedCobrancaRequest:
+      type: object
+      properties:
+        tipo:
+          $ref: '#/components/schemas/CobrancaTipoEnum'
+        descricao:
+          type: string
+          maxLength: 200
+        valor:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        vencimento:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/CobrancaStatusEnum'
+        unidade:
+          type: integer
+        morador:
+          type: integer
+          nullable: true
+    PatchedComprovantePagamentoRequest:
+      type: object
+      properties:
+        arquivo:
+          type: string
+          format: binary
+        comentario:
+          type: string
+        validado:
+          type: boolean
+        cobranca:
+          type: integer
+        morador:
+          type: integer
+        validado_por:
+          type: integer
+          nullable: true
+    PatchedCondominioRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        endereco:
+          type: string
+          minLength: 1
+        cidade:
+          type: string
+          nullable: true
+          maxLength: 100
+        estado:
+          type: string
+          nullable: true
+          maxLength: 2
+        ativo:
+          type: boolean
+    PatchedControleAcessoRequest:
+      type: object
+      properties:
+        tipo:
+          $ref: '#/components/schemas/ControleAcessoTipoEnum'
+        data_saida:
+          type: string
+          format: date-time
+          nullable: true
+        observacoes:
+          type: string
+        morador:
+          type: integer
+          nullable: true
+        visitante:
+          type: integer
+          nullable: true
+        prestador:
+          type: integer
+          nullable: true
+        unidade:
+          type: integer
+          nullable: true
+    PatchedCorrespondenciaRequest:
+      type: object
+      properties:
+        morador:
+          type: integer
+        descricao:
+          type: string
+          minLength: 1
+          maxLength: 200
+        data_retirada:
+          type: string
+          format: date-time
+          nullable: true
+    PatchedDocumentoRequest:
+      type: object
+      properties:
+        titulo:
+          type: string
+          minLength: 1
+          maxLength: 200
+        tipo:
+          $ref: '#/components/schemas/DocumentoTipoEnum'
+        arquivo:
+          type: string
+          format: binary
+        visivel_para_moradores:
+          type: boolean
+        enviado_por:
+          type: integer
+          nullable: true
+        condominio:
+          type: integer
+    PatchedEspacoComumRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        condominio:
+          type: integer
+    PatchedManutencaoRequest:
+      type: object
+      properties:
+        titulo:
+          type: string
+          minLength: 1
+          maxLength: 150
+        descricao:
+          type: string
+          minLength: 1
+        data_inicio:
+          type: string
+          format: date-time
+        data_fim:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/ManutencaoStatusEnum'
+        condominio:
+          type: integer
+        criado_por:
+          type: integer
+    PatchedMoradorRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        unidade:
+          type: integer
+          nullable: true
+        cpf:
+          type: string
+          nullable: true
+          maxLength: 14
+        rg:
+          type: string
+          nullable: true
+          maxLength: 20
+        is_proprietario:
+          type: boolean
+        is_inquilino:
+          type: boolean
+        pode_votar:
+          type: boolean
+    PatchedOcorrenciaRequest:
+      type: object
+      properties:
+        titulo:
+          type: string
+          minLength: 1
+          maxLength: 100
+        morador:
+          type: integer
+        descricao:
+          type: string
+          minLength: 1
+        status:
+          $ref: '#/components/schemas/OcorrenciaStatusEnum'
+    PatchedPerfilUsuarioRequest:
+      type: object
+      properties:
+        telefone:
+          type: string
+          maxLength: 20
+        foto:
+          type: string
+          format: binary
+          nullable: true
+        bio:
+          type: string
+    PatchedPrestadorRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        tipo_servico:
+          type: string
+          minLength: 1
+          maxLength: 100
+        telefone:
+          type: string
+          minLength: 1
+          maxLength: 20
+        condominio:
+          type: integer
+    PatchedReservaEspacoRequest:
+      type: object
+      properties:
+        espaco:
+          type: integer
+        morador:
+          type: integer
+        data:
+          type: string
+          format: date
+        horario_inicio:
+          type: string
+          format: time
+        horario_fim:
+          type: string
+          format: time
+        status:
+          $ref: '#/components/schemas/ReservaEspacoStatusEnum'
+    PatchedUnidadeRequest:
+      type: object
+      properties:
+        numero:
+          type: string
+          minLength: 1
+          maxLength: 10
+        bloco:
+          type: string
+          nullable: true
+          maxLength: 10
+        condominio:
+          type: integer
+    PatchedUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Usuário
+          description: Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_
+            apenas.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Endereço de email
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+    PatchedVisitanteRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        documento:
+          type: string
+          minLength: 1
+          maxLength: 50
+        unidade:
+          type: integer
+        morador_responsavel:
+          type: integer
+    PerfilUsuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        telefone:
+          type: string
+          maxLength: 20
+        foto:
+          type: string
+          format: uri
+          nullable: true
+        bio:
+          type: string
+      required:
+      - email
+      - id
+      - username
+    PerfilUsuarioRequest:
+      type: object
+      properties:
+        telefone:
+          type: string
+          maxLength: 20
+        foto:
+          type: string
+          format: binary
+          nullable: true
+        bio:
+          type: string
+    Prestador:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 100
+        tipo_servico:
+          type: string
+          maxLength: 100
+        telefone:
+          type: string
+          maxLength: 20
+        condominio:
+          type: integer
+      required:
+      - condominio
+      - id
+      - nome
+      - telefone
+      - tipo_servico
+    PrestadorRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        tipo_servico:
+          type: string
+          minLength: 1
+          maxLength: 100
+        telefone:
+          type: string
+          minLength: 1
+          maxLength: 20
+        condominio:
+          type: integer
+      required:
+      - condominio
+      - nome
+      - telefone
+      - tipo_servico
+    RelatorioGeral:
+      type: object
+      properties:
+        total_condominios:
+          type: integer
+        total_moradores:
+          type: integer
+        total_ocorrencias_abertas:
+          type: integer
+        total_visitantes_hoje:
+          type: integer
+        reservas_por_espaco:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      required:
+      - reservas_por_espaco
+      - total_condominios
+      - total_moradores
+      - total_ocorrencias_abertas
+      - total_visitantes_hoje
+    ReservaEspaco:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        espaco:
+          type: integer
+        morador:
+          type: integer
+        data:
+          type: string
+          format: date
+        horario_inicio:
+          type: string
+          format: time
+        horario_fim:
+          type: string
+          format: time
+        status:
+          $ref: '#/components/schemas/ReservaEspacoStatusEnum'
+        espaco_nome:
+          type: string
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+      required:
+      - data
+      - espaco
+      - espaco_nome
+      - horario_fim
+      - horario_inicio
+      - id
+      - morador
+      - status_display
+    ReservaEspacoRequest:
+      type: object
+      properties:
+        espaco:
+          type: integer
+        morador:
+          type: integer
+        data:
+          type: string
+          format: date
+        horario_inicio:
+          type: string
+          format: time
+        horario_fim:
+          type: string
+          format: time
+        status:
+          $ref: '#/components/schemas/ReservaEspacoStatusEnum'
+      required:
+      - data
+      - espaco
+      - horario_fim
+      - horario_inicio
+      - morador
+    ReservaEspacoStatusEnum:
+      enum:
+      - pendente
+      - aprovado
+      - cancelado
+      type: string
+      description: |-
+        * `pendente` - Pendente
+        * `aprovado` - Aprovado
+        * `cancelado` - Cancelado
+    TipoAcaoEnum:
+      enum:
+      - criado
+      - editado
+      - excluido
+      type: string
+      description: |-
+        * `criado` - Criado
+        * `editado` - Editado
+        * `excluido` - Excluído
+    TokenObtainPair:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+    TokenObtainPairRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+      required:
+      - access
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - refresh
+    Unidade:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        numero:
+          type: string
+          maxLength: 10
+        bloco:
+          type: string
+          nullable: true
+          maxLength: 10
+        condominio:
+          type: integer
+      required:
+      - condominio
+      - id
+      - numero
+    UnidadeRequest:
+      type: object
+      properties:
+        numero:
+          type: string
+          minLength: 1
+          maxLength: 10
+        bloco:
+          type: string
+          nullable: true
+          maxLength: 10
+        condominio:
+          type: integer
+      required:
+      - condominio
+      - numero
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: Usuário
+          description: Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_
+            apenas.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Endereço de email
+          maxLength: 254
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Ativo
+          description: Indica que o usuário será tratado como ativo. Ao invés de excluir
+            contas de usuário, desmarque isso.
+      required:
+      - id
+      - is_active
+      - username
+    UserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Usuário
+          description: Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_
+            apenas.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Endereço de email
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    Visitante:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 100
+        documento:
+          type: string
+          maxLength: 50
+        data_visita:
+          type: string
+          format: date-time
+          readOnly: true
+        unidade:
+          type: integer
+        morador_responsavel:
+          type: integer
+      required:
+      - data_visita
+      - documento
+      - id
+      - morador_responsavel
+      - nome
+      - unidade
+    VisitanteRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        documento:
+          type: string
+          minLength: 1
+          maxLength: 50
+        unidade:
+          type: integer
+        morador_responsavel:
+          type: integer
+      required:
+      - documento
+      - morador_responsavel
+      - nome
+      - unidade
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

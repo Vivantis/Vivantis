@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from condominios.models import Condominio, Unidade, Morador
+from condominios.models import Condominio, Unidade, Morador, AdministradorGeral
 
 
 class MoradorAPITests(APITestCase):
@@ -11,6 +11,7 @@ class MoradorAPITests(APITestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(username="admin", password="admin123")
+        self.admin = AdministradorGeral.objects.create(user=self.user, nome="Admin Teste", telefone="11999999999")
         self.client.force_authenticate(user=self.user)
 
         self.condominio = Condominio.objects.create(nome="Condomínio Sol", endereco="Rua Central, 123")

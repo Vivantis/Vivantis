@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils import timezone
-from .models import (
+from condominios.models import (
     Condominio, Morador, Ocorrencia, Visitante, Unidade,
     EspacoComum, ReservaEspaco, AdministradorGeral
 )
@@ -49,7 +49,7 @@ class RelatorioGeralAPITests(APITestCase):
             espaco=espaco,
             morador=self.morador,
             unidade=self.unidade,
-            data_reserva=timezone.now().date(),
+            data=timezone.now().date(),
             horario_inicio="18:00",
             horario_fim="22:00",
             status="aprovado"
