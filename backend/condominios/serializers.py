@@ -27,9 +27,17 @@ class UnidadeSerializer(serializers.ModelSerializer):
 
 # 👤 Morador
 class MoradorSerializer(serializers.ModelSerializer):
+    nome_completo = serializers.SerializerMethodField()
+
     class Meta:
         model = Morador
-        fields = '__all__'
+        fields = [
+            'id', 'nome', 'sobrenome', 'email', 'telefone', 'unidade',
+            'data_nascimento', 'foto', 'cpf', 'rg', 'nome_completo'
+        ]
+
+    def get_nome_completo(self, obj):
+        return f"{obj.nome} {obj.sobrenome}"
 
 
 # 🛠️ Prestador
@@ -41,9 +49,16 @@ class PrestadorSerializer(serializers.ModelSerializer):
 
 # 📢 Ocorrência
 class OcorrenciaSerializer(serializers.ModelSerializer):
+    status_display = serializers.SerializerMethodField()
+
     class Meta:
         model = Ocorrencia
-        fields = '__all__'
+        fields = [
+            'id', 'morador', 'descricao', 'status', 'data_registro', 'status_display'
+        ]
+
+    def get_status_display(self, obj):
+        return obj.get_status_display()
 
 
 # 👥 Visitante
@@ -62,9 +77,21 @@ class ControleAcessoSerializer(serializers.ModelSerializer):
 
 # 📦 Correspondência
 class CorrespondenciaSerializer(serializers.ModelSerializer):
+    nome_morador = serializers.SerializerMethodField()
+    retirada_display = serializers.SerializerMethodField()
+
     class Meta:
         model = Correspondencia
-        fields = '__all__'
+        fields = [
+            'id', 'morador', 'descricao', 'retirada', 'data_entrega',
+            'data_retirada', 'nome_morador', 'retirada_display'
+        ]
+
+    def get_nome_morador(self, obj):
+        return f"{obj.morador.nome} {obj.morador.sobrenome}"
+
+    def get_retirada_display(self, obj):
+        return "Retirada" if obj.retirada else "Pendente"
 
 
 # 🧱 Espaço Comum
@@ -76,9 +103,21 @@ class EspacoComumSerializer(serializers.ModelSerializer):
 
 # 📅 Reserva de Espaços
 class ReservaEspacoSerializer(serializers.ModelSerializer):
+    espaco_nome = serializers.SerializerMethodField()
+    status_display = serializers.SerializerMethodField()
+
     class Meta:
         model = ReservaEspaco
-        fields = '__all__'
+        fields = [
+            'id', 'espaco', 'morador', 'data', 'horario_inicio', 'horario_fim',
+            'status', 'espaco_nome', 'status_display'
+        ]
+
+    def get_espaco_nome(self, obj):
+        return obj.espaco.nome if obj.espaco else None
+
+    def get_status_display(self, obj):
+        return obj.get_status_display()
 
 
 # 📂 Documentos
@@ -133,12 +172,12 @@ class AutorizacaoEntradaSerializer(serializers.ModelSerializer):
 
 # 📋 Auditoria de Ações
 class AuditoriaSerializer(serializers.ModelSerializer):
-    usuario = serializers.StringRelatedField()  # Exibe o nome do usuário
+    usuario = serializers.StringRelatedField()
 
     class Meta:
         model = Auditoria
         fields = '__all__'
-        read_only_fields = ['usuario', 'data']  # Campos protegidos
+        read_only_fields = ['usuario', 'data']
 
 
 # 🧑‍💻 Perfil de Usuário
@@ -161,9 +200,6 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'is_active']
 
     def create(self, validated_data):
-        """
-        Cria o usuário com hash da senha e respeita o valor de is_active (default=False).
-        """
         is_active = validated_data.get('is_active', False)
 
         user = User.objects.create_user(
