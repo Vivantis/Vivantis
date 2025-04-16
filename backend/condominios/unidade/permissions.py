@@ -1,10 +1,8 @@
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 
-# ─────────────────────────────────────────────────────────────
-# 🔐 Permissões Customizadas
-# ─────────────────────────────────────────────────────────────
 
+# 📌 Permissões customizadas
 class IsAdministradorGeral(permissions.BasePermission):
     """
     Permissão apenas para administradores gerais.
@@ -31,10 +29,22 @@ class IsProprietarioOuAdmin(permissions.BasePermission):
         return False
 
 
+class IsMoradorDono(permissions.BasePermission):
+    """
+    Permissão se o usuário for o morador vinculado ao objeto.
+    """
+    def has_object_permission(self, request, view, obj):
+        return (
+            hasattr(obj, 'morador') and 
+            obj.morador and 
+            hasattr(obj.morador, 'email') and
+            obj.morador.email == request.user.email
+        )
+
+
 class IsPortaria(permissions.BasePermission):
     """
-    Permissão básica para usuários da portaria (usuários sem perfil de morador ou admin).
-    Pode ser adaptada caso precise ser mais específica.
+    Permissão para usuários da portaria (sem vínculo de morador ou admin).
     """
     def has_permission(self, request, view):
         return request.user and request.user.is_authenticated and not (
@@ -44,7 +54,7 @@ class IsPortaria(permissions.BasePermission):
 
 class IsPublicReadOnly(permissions.BasePermission):
     """
-    Permissão que permite leitura pública (GET), mas exige login para ações de escrita.
+    Permite leitura (GET), exige login para escrita (POST, PUT, DELETE).
     """
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
@@ -52,24 +62,7 @@ class IsPublicReadOnly(permissions.BasePermission):
         return request.user and request.user.is_authenticated
 
 
-class IsMoradorDono(permissions.BasePermission):
-    """
-    Permissão para o morador acessar apenas os próprios registros.
-    Verifica se o campo `morador` do objeto pertence ao `request.user`.
-    """
-    def has_object_permission(self, request, view, obj):
-        if request.user and request.user.is_authenticated:
-            if hasattr(request.user, 'administradorgeral'):
-                return True
-            if hasattr(request.user, 'morador') and obj.morador == request.user.morador:
-                return True
-        return False
-
-
-# ─────────────────────────────────────────────────────────────
-# 🔗 Permissões por ViewSet
-# ─────────────────────────────────────────────────────────────
-
+# 📦 Dicionário com permissões por ViewSet
 PERMISSIONS_BY_VIEWSET = {
     'DocumentoViewSet': [IsAuthenticated, IsAdministradorGeral],
     'CobrancaViewSet': [IsAuthenticated, IsAdministradorGeral],
@@ -87,19 +80,13 @@ PERMISSIONS_BY_VIEWSET = {
     'ControleAcessoViewSet': [IsAuthenticated],
     'CorrespondenciaViewSet': [IsAuthenticated],
     'CondominioViewSet': [IsAuthenticated],
-    'UnidadeViewSet': [IsAuthenticated],
+    'UnidadeViewSet': [IsAuthenticated, IsPublicReadOnly],  # 👈 Atualizado aqui
     'PrestadorViewSet': [IsAuthenticated],
     'EspacoComumViewSet': [IsAuthenticated],
     'RelatorioViewSet': [IsAuthenticated, IsAdministradorGeral],
 }
 
 
-# ─────────────────────────────────────────────────────────────
-# 🔧 Função para aplicar dinamicamente
-# ─────────────────────────────────────────────────────────────
-
+# 🔧 Função auxiliar para aplicar permissões dinamicamente
 def get_viewset_permissions(viewset_name):
-    """
-    Função utilitária para aplicar permissões dinamicamente nos ViewSets
-    """
     return PERMISSIONS_BY_VIEWSET.get(viewset_name, [IsAuthenticated])
