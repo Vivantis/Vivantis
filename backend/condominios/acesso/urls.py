@@ -1,22 +1,11 @@
 from rest_framework.routers import DefaultRouter
-from .views_acesso import ControleAcessoViewSet  # ViewSet do módulo de Acesso
+from .views import ControleAcessoViewSet  # Ajuste: importa de views.py
 
-# 🔧 Roteador padrão do DRF
+# ─────────────────────────────────────────────────────────────
+# Roteador para o módulo de Controle de Acesso
+# ─────────────────────────────────────────────────────────────
 router = DefaultRouter()
+router.register(r'controle-acesso', ControleAcessoViewSet, basename='controle-acesso')
 
-# 🚪 Endpoint: /api/acessos/
-router.register(r'acessos', ControleAcessoViewSet, basename='acesso')
-
-# 🌐 URLs geradas automaticamente
-urlpatterns = router.urls
-from rest_framework.routers import DefaultRouter
-from .views_acesso import ControleAcessoViewSet  # ViewSet do módulo de Acesso
-
-# 🔧 Roteador padrão do DRF
-router = DefaultRouter()
-
-# 🚪 Endpoint: /api/acessos/
-router.register(r'acessos', ControleAcessoViewSet, basename='acesso')
-
-# 🌐 URLs geradas automaticamente
+# Exporta as URLs para inclusão no roteador principal
 urlpatterns = router.urls

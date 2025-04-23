@@ -1,16 +1,11 @@
-# condominios/urls_reservas.py
-
-from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views_reservas import ReservaEspacoViewSet  # Certifique-se de ter esse arquivo com a view
+from .views import ReservaEspacoViewSet  # importa do views.py, não views_reservas.py
 
-# 🔧 Roteador padrão do DRF
+# ─────────────────────────────────────────────────────────────
+# Roteador para o módulo de Reservas de Espaço
+# ─────────────────────────────────────────────────────────────
 router = DefaultRouter()
+router.register(r'reservas', ReservaEspacoViewSet, basename='reservas')
 
-# Registra o endpoint de reservas
-router.register(r'reservas', ReservaEspacoViewSet)
-
-# 🌐 URLs expostas para inclusão no roteador principal
-urlpatterns = [
-    path('', include(router.urls)),
-]
+# Exporta as URLs para inclusão no roteador principal
+urlpatterns = router.urls

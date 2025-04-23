@@ -1,7 +1,8 @@
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from condominios.models import ComprovantePagamento
-from condominios.serializers import ComprovantePagamentoSerializer
+from .models import ComprovantePagamento
+from .serializers import ComprovantePagamentoSerializer
+from .permissions import get_viewset_permissions
 
 class ComprovantePagamentoViewSet(viewsets.ModelViewSet):
     """
@@ -11,15 +12,16 @@ class ComprovantePagamentoViewSet(viewsets.ModelViewSet):
     """
     queryset = ComprovantePagamento.objects.all().order_by('-data_envio')
     serializer_class = ComprovantePagamentoSerializer
+    permission_classes = get_viewset_permissions('ComprovantePagamentoViewSet')
 
     # Ativa filtros, ordenação e busca
     filter_backends = [
-        DjangoFilterBackend,  # permite filtro direto na URL (ex: ?morador=1)
-        filters.OrderingFilter,  # permite ordenação (ex: ?ordering=-data_envio)
-        filters.SearchFilter  # permite busca textual (ex: ?search=pagamento)
+        DjangoFilterBackend,    # ?morador=1, ?cobranca=2…
+        filters.OrderingFilter, # ?ordering=-data_envio
+        filters.SearchFilter    # ?search=pagamento
     ]
 
-    # Campos que podem ser filtrados via query string
+    # Campos que podem ser filtrados
     filterset_fields = ['morador', 'cobranca', 'validado']
 
     # Campos permitidos para ordenação

@@ -1,21 +1,15 @@
+from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_field
+from .models import ComprovantePagamento
 
 class ComprovantePagamentoSerializer(serializers.ModelSerializer):
-    nome_morador = serializers.SerializerMethodField()
-    nome_cobranca = serializers.SerializerMethodField()
+    # Campo extra para exibir o label de 'validado'
+    validado_display = serializers.SerializerMethodField()
+
+    @extend_schema_field(serializers.CharField())
+    def get_validado_display(self, obj):
+        return obj.get_validado_display()
 
     class Meta:
         model = ComprovantePagamento
-        fields = [
-            'id', 'morador', 'cobranca', 'arquivo', 'comentario',
-            'data_envio', 'validado', 'validado_por',
-            'nome_morador', 'nome_cobranca'
-        ]
-
-    @extend_schema_field(str)
-    def get_nome_morador(self, obj):
-        return obj.morador.nome if obj.morador else None
-
-    @extend_schema_field(str)
-    def get_nome_cobranca(self, obj):
-        return str(obj.cobranca) if obj.cobranca else None
+        fields = '__all__'

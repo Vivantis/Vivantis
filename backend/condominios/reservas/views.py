@@ -1,5 +1,11 @@
+from rest_framework import viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
+from .models import ReservaEspaco
+from .serializers import ReservaEspacoSerializer
+from .permissions import get_viewset_permissions
+
 # ─────────────────────────────────────────────────────────────
-# 📅 ViewSet para Reservas de Espaços
+# ViewSet para Reservas de Espaços
 # Permite que moradores reservem espaços e visualizem suas reservas
 # ─────────────────────────────────────────────────────────────
 class ReservaEspacoViewSet(viewsets.ModelViewSet):
@@ -10,11 +16,11 @@ class ReservaEspacoViewSet(viewsets.ModelViewSet):
     # Habilita filtros, ordenação e busca
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_fields = [
-        'morador',         # Ex: ?morador=1
-        'unidade',         # Ex: ?unidade=2
-        'espaco',          # Ex: ?espaco=5
-        'data',            # Ex: ?data=2025-04-20
-        'status'           # Ex: ?status=pendente
+        'morador',   # Ex: ?morador=1
+        'unidade',   # Ex: ?unidade=2
+        'espaco',    # Ex: ?espaco=5
+        'data',      # Ex: ?data=2025-04-20
+        'status'     # Ex: ?status=pendente
     ]
-    ordering_fields = ['data', 'horario_inicio']   # Ex: ?ordering=data
-    search_fields = ['observacoes']                # Ex: ?search=aniversario
+    ordering_fields = ['data', 'horario_inicio']     # Ex: ?ordering=data
+    search_fields = ['observacoes']                  # Ex: ?search=aniversario
