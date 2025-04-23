@@ -1,19 +1,22 @@
 from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_field
-from condominios.models import Ocorrencia
+from .models import Ocorrencia  # import relativo para o modelo local
 
-
-# 📢 Ocorrência
 class OcorrenciaSerializer(serializers.ModelSerializer):
+    # exibe o label do status
     status_display = serializers.SerializerMethodField()
+    # exibe o nome do morador
     morador_nome = serializers.SerializerMethodField()
+    # exibe informações da unidade
     unidade_info = serializers.SerializerMethodField()
 
     class Meta:
         model = Ocorrencia
         fields = [
-            'id', 'titulo', 'descricao', 'status', 'status_display',
-            'morador', 'morador_nome', 'unidade', 'unidade_info',
+            'id', 'titulo', 'descricao',
+            'status', 'status_display',
+            'morador', 'morador_nome',
+            'unidade', 'unidade_info',
             'data_registro', 'atualizado_em'
         ]
         read_only_fields = ['data_registro', 'atualizado_em']

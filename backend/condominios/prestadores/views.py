@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import Prestador
-from .serializer import PrestadorSerializer
+from .serializers import PrestadorSerializer  # Ajuste: plural "serializers"
 
 class PrestadorViewSet(viewsets.ModelViewSet):
     """

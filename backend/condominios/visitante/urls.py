@@ -1,11 +1,11 @@
 from rest_framework.routers import DefaultRouter
-from .views_visitantes import VisitanteViewSet  # Importa o ViewSet de Visitantes
+from .views import VisitanteViewSet  # Ajuste: importa de views.py
 
-# Cria um roteador padrão do DRF
+# ─────────────────────────────────────────────────────────────
+# Roteador para o módulo de Visitantes
+# ─────────────────────────────────────────────────────────────
 router = DefaultRouter()
+router.register(r'visitantes', VisitanteViewSet, basename='visitantes')
 
-# Registra a rota de visitantes com o prefixo 'visitantes'
-router.register(r'visitantes', VisitanteViewSet)
-
-# Expõe as URLs geradas pelo roteador
+# Exporta as URLs para inclusão no roteador principal
 urlpatterns = router.urls

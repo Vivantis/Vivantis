@@ -1,13 +1,12 @@
 from rest_framework.permissions import IsAuthenticated
-from condominios.permissions import IsProprietarioOuAdmin
-
-PERMISSIONS_BY_VIEWSET = {
-    'OcorrenciaViewSet': [IsAuthenticated, IsProprietarioOuAdmin],
-}
-
+from core.permissions import IsProprietarioOuAdmin
 
 def get_viewset_permissions(viewset_name):
     """
-    Retorna as permissões específicas para os ViewSets do módulo de Ocorrências.
+    Permissões para o módulo de Ocorrências:
+    - Moradores autenticados podem listar e criar suas ocorrências.
+    - Proprietário ou administrador geral pode ver/editar/todos.
     """
-    return PERMISSIONS_BY_VIEWSET.get(viewset_name, [IsAuthenticated])
+    if viewset_name == 'OcorrenciaViewSet':
+        return [IsAuthenticated, IsProprietarioOuAdmin]
+    return [IsAuthenticated]

@@ -1,11 +1,11 @@
 from rest_framework.routers import DefaultRouter
-from .views_ocorrencias import OcorrenciaViewSet  # Importa o ViewSet de Ocorrências
+from .views import OcorrenciaViewSet  # Ajuste: importa de views.py
 
-# Cria um roteador padrão do DRF
+# ─────────────────────────────────────────────────────────────
+# Roteador para o módulo de Ocorrências
+# ─────────────────────────────────────────────────────────────
 router = DefaultRouter()
+router.register(r'ocorrencias', OcorrenciaViewSet, basename='ocorrencias')
 
-# Registra a rota de ocorrências com o prefixo 'ocorrencias'
-router.register(r'ocorrencias', OcorrenciaViewSet)
-
-# Expõe as URLs geradas pelo roteador
+# Exporta as URLs para inclusão no roteador principal
 urlpatterns = router.urls

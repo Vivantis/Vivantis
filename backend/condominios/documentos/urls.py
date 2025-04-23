@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from .views_documentos import DocumentoViewSet
+from .views import DocumentoViewSet  # Ajuste: importa de views.py
 
 # ─────────────────────────────────────────────────────────────
 # Roteador para o módulo de Documentos
