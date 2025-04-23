@@ -1,4 +1,5 @@
 from django.contrib import admin
-from .models import Condominio
+from condominios.condominio.models import Condominio
+
 
 admin.site.register(Condominio)

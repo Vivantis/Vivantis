@@ -1,5 +1,8 @@
+from rest_framework import serializers
+from condominios.avisos.models import Aviso
 
-# 🔔 Avisos
+
+# 📢 Serializer para o modelo Aviso
 class AvisoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Aviso

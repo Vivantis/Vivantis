@@ -18,11 +18,24 @@ urlpatterns = [
     # Admin do Django
     path('admin/', admin.site.urls),
 
-    # API principal
-    path('api/', include('condominios.urls')),
-
-    # Cadastro e aprovação de usuários
-    path('api/usuarios/', include('condominios.urls_cadastro_aprovacao')),
+    # 🌐 API modularizada por domínio
+    path('api/condominios/', include('condominios.condominio.urls')),
+    path('api/unidades/', include('condominios.unidade.urls')),
+    path('api/moradores/', include('condominios.morador.urls')),
+    path('api/prestadores/', include('condominios.prestadores.urls')),
+    path('api/avisos/', include('condominios.avisos.urls')),
+    path('api/documentos/', include('condominios.documentos.urls')),
+    path('api/ocorrencias/', include('condominios.ocorrencia.urls')),
+    path('api/visitantes/', include('condominios.visitante.urls')),
+    path('api/controle-acesso/', include('condominios.acesso.urls')),
+    path('api/correspondencias/', include('condominios.correspondencia.urls')),
+    path('api/reservas/', include('condominios.reservas.urls')),
+    path('api/comprovantes/', include('condominios.comprovantes.urls')),
+    path('api/cobrancas/', include('condominios.cobrancas.urls')),
+    path('api/usuarios/', include('condominios.cadastroaprovacao.urls')),
+    path('api/auditoria/', include('condominios.auditoria.urls')),
+    path('api/relatorios/', include('condominios.relatorios.urls')),
+    path('api/perfil/', include('condominios.perfil.urls')),
 
     # 🔐 JWT Auth endpoints
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

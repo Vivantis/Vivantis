@@ -1,19 +1,11 @@
-from rest_framework import permissions
+from rest_framework.permissions import BasePermission
 
-class IsAuthenticated(permissions.IsAuthenticated):
+class EhMoradorDoCondominioOuAdmin(BasePermission):
     """
-    Apenas usuários autenticados podem acessar o módulo de Prestadores.
+    Permite acesso se o usuário for admin ou morador do condomínio vinculado ao prestador.
     """
-    pass
-
-
-PERMISSIONS_BY_VIEWSET = {
-    'PrestadorViewSet': [IsAuthenticated],
-}
-
-
-def get_viewset_permissions(viewset_name):
-    """
-    Função utilitária para aplicar permissões do módulo Prestadores.
-    """
-    return PERMISSIONS_BY_VIEWSET.get(viewset_name, [IsAuthenticated])
+    def has_object_permission(self, request, view, obj):
+        user = request.user
+        if user.is_staff:
+            return True
+        return hasattr(user, 'morador') and obj.condominio == user.morador.unidade.condominio

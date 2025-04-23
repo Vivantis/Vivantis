@@ -1,4 +1,8 @@
-# 🔧 Manutenções
+from django.db import models
+from django.contrib.auth.models import User
+from condominios.condominio.models import Condominio
+
+# 🔧 Registro de manutenções programadas e realizadas nos condomínios
 class Manutencao(models.Model):
     STATUS_CHOICES = [
         ('planejada', 'Planejada'),
@@ -16,3 +20,8 @@ class Manutencao(models.Model):
 
     def __str__(self):
         return f"{self.titulo} - {self.get_status_display()}"
+
+    class Meta:
+        verbose_name = "Manutenção"
+        verbose_name_plural = "Manutenções"
+        ordering = ['-data_inicio']

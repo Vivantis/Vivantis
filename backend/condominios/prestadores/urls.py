@@ -1,7 +1,10 @@
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PrestadorViewSet  # ou .views_prestadores se for esse o nome do arquivo
+from .views import PrestadorViewSet
 
 router = DefaultRouter()
-router.register(r'prestadores', PrestadorViewSet)
+router.register(r'', PrestadorViewSet, basename='prestador')
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('', include(router.urls)),
+]

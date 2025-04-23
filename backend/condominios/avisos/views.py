@@ -3,7 +3,8 @@
 from rest_framework import viewsets
 from .models import Aviso
 from .serializers import AvisoSerializer
-from .permissions import get_viewset_permissions  # 🔐 Importa a função de permissões dinâmicas
+from core.permissions import get_viewset_permissions
+
 
 # ViewSet para o modelo Aviso
 # Permite listar, criar, editar e deletar avisos e comunicados do condomínio

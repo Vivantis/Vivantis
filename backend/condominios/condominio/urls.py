@@ -1,9 +1,9 @@
 # condominios/condominio/urls.py
+
 from rest_framework.routers import DefaultRouter
-from .views import CondominioViewSet, UnidadeViewSet
+from condominios.condominio.views import CondominioViewSet
 
 router = DefaultRouter()
-router.register(r'condominios', CondominioViewSet)
-router.register(r'unidades', UnidadeViewSet)
+router.register(r'', CondominioViewSet)  # endpoint base: /api/condominios/
 
 urlpatterns = router.urls

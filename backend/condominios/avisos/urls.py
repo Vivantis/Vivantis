@@ -1,5 +1,6 @@
 from rest_framework.routers import DefaultRouter
-from .views_avisos import AvisoViewSet
+from .views import AvisoViewSet
+
 
 # ─────────────────────────────────────────────────────────────
 # Roteador para o módulo de Avisos e Comunicados

@@ -1,0 +1,6 @@
+from .permissions import EhDonoOuAdmin
+
+class PerfilUsuarioViewSet(viewsets.ModelViewSet):
+    ...
+    permission_classes = [IsAuthenticated, EhDonoOuAdmin]
+    ...

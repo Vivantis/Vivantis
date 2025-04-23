@@ -10,25 +10,49 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ───────────────────────────────
 SECRET_KEY = 'django-insecure-@2kooq@391@xs-twgg*fb-#hnflnl2^7)bwi-h=)%-am*k*wcn'
 DEBUG = True  # ❗ Em produção, altere para False
-
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']  # ❗Obrigatório se DEBUG=False
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # ───────────────────────────────
 # 📦 Aplicativos instalados
 # ───────────────────────────────
 INSTALLED_APPS = [
+    # Libs de terceiros
     'corsheaders',
+    'rest_framework',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
+    'django_filters',
+
+    # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'condominios',
-    'rest_framework',
-    'drf_spectacular',
-    'drf_spectacular_sidecar',
-    'django_filters',
+
+    # Apps do projeto Vivantis (modularizados)
+    'condominios.acesso',
+    'condominios.administradorgeral',
+    'condominios.auditoria',
+    'condominios.autorizacoes',
+    'condominios.avisos',
+    'condominios.cadastroaprovacao',
+    'condominios.cobrancas',
+    'condominios.comprovantes',
+    'condominios.condominio',
+    'condominios.correspondencia',
+    'condominios.documentos',
+    'condominios.espacoscomuns',
+    'condominios.manutencoes',
+    'condominios.morador',
+    'condominios.ocorrencia',
+    'condominios.perfil',
+    'condominios.prestadores',
+    'condominios.relatorios',
+    'condominios.reservas',
+    'condominios.unidade',
+    'condominios.visitante',
 ]
 
 # ───────────────────────────────
@@ -49,7 +73,6 @@ MIDDLEWARE = [
 # 🔀 URLs e WSGI
 # ───────────────────────────────
 ROOT_URLCONF = 'core.urls'
-
 WSGI_APPLICATION = 'core.wsgi.application'
 
 # ───────────────────────────────
@@ -88,18 +111,10 @@ DATABASES = {
 # 🔐 Validação de senha
 # ───────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # ───────────────────────────────
@@ -158,5 +173,4 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
 ]
-
 CORS_ALLOW_CREDENTIALS = True

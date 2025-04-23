@@ -1,4 +1,8 @@
-# 📦 Correspondência
+from django.db import models
+from condominios.morador.models import Morador
+from condominios.unidade.models import Unidade
+
+# 📦 Correspondência recebida na portaria
 class Correspondencia(models.Model):
     descricao = models.CharField(max_length=200)
     morador = models.ForeignKey(Morador, on_delete=models.CASCADE)
@@ -10,3 +14,8 @@ class Correspondencia(models.Model):
 
     def __str__(self):
         return f"{self.descricao} - {self.morador.nome}"
+
+    class Meta:
+        verbose_name = "Correspondência"
+        verbose_name_plural = "Correspondências"
+        ordering = ['-data_recebimento']

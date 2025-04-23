@@ -1,18 +1,18 @@
-from rest_framework import viewsets, filters
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from .models import Prestador
-from .serializers import PrestadorSerializer
-from .permissions import get_viewset_permissions
+from .serializer import PrestadorSerializer
 
-
-# 👷 ViewSet para Prestadores de Serviço
-# Permite que administradores registrem e gerenciem prestadores
 class PrestadorViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gerenciamento dos prestadores de serviço.
+    """
     queryset = Prestador.objects.all()
     serializer_class = PrestadorSerializer
-    permission_classes = get_viewset_permissions('PrestadorViewSet')
+    permission_classes = [IsAuthenticated]
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['tipo_servico', 'condominio']  # 🔍 Exemplo de filtros úteis
-    search_fields = ['nome']
-    ordering_fields = ['nome']
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Prestador.objects.all()
+        return Prestador.objects.filter(condominio__morador__user=user).distinct()

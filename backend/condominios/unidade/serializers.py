@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from condominios.models import Unidade
+from condominios.unidade.models import Unidade
 
-
+# 🏠 Unidade
 class UnidadeSerializer(serializers.ModelSerializer):
     condominio_nome = serializers.CharField(source='condominio.nome', read_only=True)
 

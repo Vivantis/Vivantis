@@ -1,10 +1,11 @@
-# reservas/models.py
-
 from django.db import models
-from condominios.models import Morador, Unidade, EspacoComum
+from condominios.morador.models import Morador
+from condominios.unidade.models import Unidade
+from condominios.espacoscomuns.models import EspacoComum
 
 
-# 🗓️ Reserva de Espaços
+
+# 🗓️ Reserva de Espaços Comuns pelos moradores
 class ReservaEspaco(models.Model):
     STATUS_CHOICES = [
         ('pendente', 'Pendente'),
@@ -12,9 +13,9 @@ class ReservaEspaco(models.Model):
         ('cancelado', 'Cancelado'),
     ]
 
-    morador = models.ForeignKey(Morador, on_delete=models.CASCADE)
-    unidade = models.ForeignKey(Unidade, on_delete=models.CASCADE)
-    espaco = models.ForeignKey(EspacoComum, on_delete=models.CASCADE)
+    morador = models.ForeignKey(Morador, on_delete=models.CASCADE, related_name='reservas')
+    unidade = models.ForeignKey(Unidade, on_delete=models.CASCADE, related_name='reservas')
+    espaco = models.ForeignKey(EspacoComum, on_delete=models.CASCADE, related_name='reservas')
     data = models.DateField()
     horario_inicio = models.TimeField()
     horario_fim = models.TimeField()
@@ -24,6 +25,7 @@ class ReservaEspaco(models.Model):
     class Meta:
         verbose_name = "Reserva de Espaço"
         verbose_name_plural = "Reservas de Espaços"
+        ordering = ['-data']
         constraints = [
             models.UniqueConstraint(
                 fields=['espaco', 'data', 'horario_inicio', 'horario_fim'],

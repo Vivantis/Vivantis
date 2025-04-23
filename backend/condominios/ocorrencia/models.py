@@ -1,4 +1,8 @@
-# 📢 Ocorrência
+from django.db import models
+from condominios.morador.models import Morador
+from condominios.unidade.models import Unidade
+
+# 📢 Ocorrência: chamados registrados pelos moradores
 class Ocorrencia(models.Model):
     STATUS_CHOICES = [
         ('aberta', 'Aberta'),
@@ -17,3 +21,7 @@ class Ocorrencia(models.Model):
     def __str__(self):
         return f"{self.titulo} - {self.get_status_display()}"
 
+    class Meta:
+        verbose_name = "Ocorrência"
+        verbose_name_plural = "Ocorrências"
+        ordering = ['-data_registro']
