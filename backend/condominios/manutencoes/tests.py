@@ -1,7 +1,10 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from .models import Condominio, Manutencao, AdministradorGeral
+
+from condominios.condominio.models import Condominio
+from condominios.manutencoes.models import Manutencao
+from condominios.administradorgeral.models import AdministradorGeral
 
 
 class ManutencaoAPITests(APITestCase):
@@ -14,13 +17,20 @@ class ManutencaoAPITests(APITestCase):
         self.user = User.objects.create_user(username='sindico', password='admin123')
         self.client.force_authenticate(user=self.user)
 
-        # Torna o usuário um administrador geral
-        self.admin = AdministradorGeral.objects.create(user=self.user, nome='Síndico', telefone='(11) 99999-0000')
+        # Torna o usuário um administrador geral (síndico)
+        self.admin = AdministradorGeral.objects.create(
+            user=self.user,
+            nome='Síndico',
+            telefone='(11) 99999-0000'
+        )
 
-        # Cria um condomínio base
+        # Cria um condomínio base com todos os campos obrigatórios
         self.condominio = Condominio.objects.create(
             nome="Residencial Aurora",
-            endereco="Rua das Luzes, 101"
+            endereco="Rua das Luzes, 101",
+            cidade="São Paulo",
+            estado="SP",
+            ativo=True
         )
 
         # Dados padrão para criação de manutenção
@@ -53,11 +63,15 @@ class ManutencaoAPITests(APITestCase):
         )
         response = self.client.get('/api/manutencao/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data), 1)
+
+        # DRF padrão usa paginação com 'count' e 'results'
+        self.assertIn('count', response.data)
+        self.assertGreaterEqual(response.data['count'], 1)
+        self.assertIsInstance(response.data['results'], list)
 
     def test_editar_manutencao(self):
         """Testa a atualização dos dados de uma manutenção"""
-        manutencao = Manutencao.objects.create(
+        m = Manutencao.objects.create(
             titulo="Reparo no portão",
             descricao="Reparo urgente no portão da garagem.",
             data_inicio="2025-04-15T08:00:00Z",
@@ -75,13 +89,13 @@ class ManutencaoAPITests(APITestCase):
             "condominio": self.condominio.id,
             "criado_por": self.user.id,
         }
-        response = self.client.put(f'/api/manutencao/{manutencao.id}/', novos_dados, format='json')
+        response = self.client.put(f'/api/manutencao/{m.id}/', novos_dados, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['titulo'], "Reparo no portão - Urgente")
+        self.assertEqual(response.data['titulo'], novos_dados['titulo'])
 
     def test_deletar_manutencao(self):
         """Testa a exclusão de uma manutenção"""
-        manutencao = Manutencao.objects.create(
+        m = Manutencao.objects.create(
             titulo="Troca de lâmpadas",
             descricao="Troca das lâmpadas da garagem.",
             data_inicio="2025-04-17T10:00:00Z",
@@ -90,6 +104,6 @@ class ManutencaoAPITests(APITestCase):
             condominio=self.condominio,
             criado_por=self.user
         )
-        response = self.client.delete(f'/api/manutencao/{manutencao.id}/')
+        response = self.client.delete(f'/api/manutencao/{m.id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertFalse(Manutencao.objects.filter(id=manutencao.id).exists())
+        self.assertFalse(Manutencao.objects.filter(id=m.id).exists())

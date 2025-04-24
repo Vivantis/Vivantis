@@ -2,7 +2,9 @@ import pytest
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
-from condominios.models import Unidade, Condominio
+
+from condominios.condominio.models import Condominio
+from condominios.unidade.models import Unidade
 
 @pytest.fixture
 def usuario_admin(db):
@@ -31,7 +33,7 @@ def setup_unidades(db):
 def test_listar_todas_unidades(cliente_autenticado, setup_unidades):
     response = cliente_autenticado.get('/api/unidades/')
     assert response.status_code == 200
-    assert len(response.data["results"]) == 3  # Corrigido para acessar 'results'
+    assert len(response.data["results"]) == 3
 
 def test_filtrar_por_numero(cliente_autenticado, setup_unidades):
     response = cliente_autenticado.get('/api/unidades/?numero=101')

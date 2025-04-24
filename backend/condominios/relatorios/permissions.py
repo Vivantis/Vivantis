@@ -1,8 +1,7 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import IsAuthenticated
+from core.permissions import IsAdministradorGeral
 
-class EhAutorOuAdmin(BasePermission):
-    """
-    Permite acesso apenas se for o criador do relatório ou admin.
-    """
-    def has_object_permission(self, request, view, obj):
-        return request.user.is_staff or obj.gerado_por == request.user
+def get_viewset_permissions(viewset_name):
+    if viewset_name == 'RelatorioViewSet':
+        return [IsAuthenticated, IsAdministradorGeral]
+    return [IsAuthenticated]

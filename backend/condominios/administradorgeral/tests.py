@@ -1,7 +1,8 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from condominios.models import AdministradorGeral
+
+from condominios.administradorgeral.models import AdministradorGeral
 
 
 class AdministradorGeralAPITests(APITestCase):
@@ -12,7 +13,12 @@ class AdministradorGeralAPITests(APITestCase):
     def setUp(self):
         # Cria um administrador autenticado para os testes
         self.user = User.objects.create_user(username='admin_geral', password='admin123')
-        self.admin_profile = AdministradorGeral.objects.create(user=self.user, nome='Admin', telefone='(11) 90000-0000')
+        self.admin_profile = AdministradorGeral.objects.create(
+            user=self.user,
+            nome='Admin',
+            telefone='(11) 90000-0000'
+        )
+        # Autentica a requisição com esse usuário
         self.client.force_authenticate(user=self.user)
 
     def test_criar_administrador(self):
@@ -30,16 +36,30 @@ class AdministradorGeralAPITests(APITestCase):
     def test_listar_administradores(self):
         """Testa a listagem de administradores existentes"""
         outro_user = User.objects.create_user(username='zelador_pro', password='123456')
-        AdministradorGeral.objects.create(user=outro_user, nome="Zelador Pro", telefone="(11) 90000-0000")
+        AdministradorGeral.objects.create(
+            user=outro_user,
+            nome="Zelador Pro",
+            telefone="(11) 90000-0000"
+        )
 
         response = self.client.get('/api/administradores/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data), 1)
+        # Se estiver usando paginação, talvez precise inspecionar response.data['results']
+        data = response.data
+        if isinstance(data, dict) and 'results' in data:
+            count = len(data['results'])
+        else:
+            count = len(data)
+        self.assertGreaterEqual(count, 1)
 
     def test_editar_administrador(self):
         """Testa a atualização dos dados de um administrador"""
         outro_user = User.objects.create_user(username='fulano', password='123456')
-        adm = AdministradorGeral.objects.create(user=outro_user, nome="Fulano", telefone="(11) 90000-1234")
+        adm = AdministradorGeral.objects.create(
+            user=outro_user,
+            nome="Fulano",
+            telefone="(11) 90000-1234"
+        )
 
         novos_dados = {
             "user": outro_user.id,
@@ -48,12 +68,16 @@ class AdministradorGeralAPITests(APITestCase):
         }
         response = self.client.put(f'/api/administradores/{adm.id}/', novos_dados, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['nome'], "Fulano Atualizado")
+        self.assertEqual(response.data['nome'], novos_dados['nome'])
 
     def test_deletar_administrador(self):
         """Testa a exclusão de um administrador"""
         outro_user = User.objects.create_user(username='deletavel', password='123456')
-        adm = AdministradorGeral.objects.create(user=outro_user, nome="Deletável", telefone="(11) 90000-1234")
+        adm = AdministradorGeral.objects.create(
+            user=outro_user,
+            nome="Deletável",
+            telefone="(11) 90000-1234"
+        )
 
         response = self.client.delete(f'/api/administradores/{adm.id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

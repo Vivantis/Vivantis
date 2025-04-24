@@ -1,10 +1,14 @@
-from rest_framework.permissions import IsAuthenticated
-from condominios.permissions import IsAdministradorGeral  # já existente no projeto
+# backend/condominios/auditoria/permissions.py
 
-# Apenas administradores gerais podem acessar auditorias
-PERMISSIONS_BY_VIEWSET = {
-    'AuditoriaViewSet': [IsAuthenticated, IsAdministradorGeral],
-}
+from rest_framework.permissions import IsAuthenticated
+from core.permissions import IsAdministradorGeral
 
 def get_viewset_permissions(viewset_name):
-    return PERMISSIONS_BY_VIEWSET.get(viewset_name, [IsAuthenticated])
+    """
+    Permissões para o módulo de Auditoria:
+    - Usuários autenticados podem listar suas próprias ações de auditoria.
+    - Administradores gerais podem ver tudo.
+    """
+    if viewset_name == 'AuditoriaViewSet':
+        return [IsAuthenticated, IsAdministradorGeral]
+    return [IsAuthenticated]

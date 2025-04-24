@@ -1,7 +1,10 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated          # <-- adicionado
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Relatorio
-from .serializer import RelatorioSerializer
+from .serializers import RelatorioSerializer
+from .permissions import get_viewset_permissions
+
 
 class RelatorioViewSet(viewsets.ModelViewSet):
     """

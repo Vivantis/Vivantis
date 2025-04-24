@@ -1,7 +1,8 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from condominios.models import Condominio
+
+from condominios.condominio.models import Condominio
 
 
 class CondominioAPITests(APITestCase):
@@ -10,6 +11,7 @@ class CondominioAPITests(APITestCase):
     """
 
     def setUp(self):
+        # Usuário autenticado
         self.user = User.objects.create_user(username="admin", password="admin123")
         self.client.force_authenticate(user=self.user)
 
@@ -39,6 +41,8 @@ class CondominioAPITests(APITestCase):
         """Testa a listagem dos condomínios via GET."""
         response = self.client.get("/api/condominios/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # verifica paginação DRF padrão
+        self.assertIn("results", response.data)
         self.assertGreaterEqual(len(response.data["results"]), 1)
 
     def test_atualizar_condominio(self):
@@ -50,7 +54,11 @@ class CondominioAPITests(APITestCase):
             "estado": "SP",
             "ativo": True
         }
-        response = self.client.put(f"/api/condominios/{self.condominio.id}/", novos_dados, format="json")
+        response = self.client.put(
+            f"/api/condominios/{self.condominio.id}/",
+            novos_dados,
+            format="json"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["nome"], "Residencial Atualizado")
 
@@ -64,6 +72,7 @@ class CondominioAPITests(APITestCase):
         """Testa o filtro por cidade na listagem."""
         response = self.client.get("/api/condominios/?cidade=São Paulo")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # garante que ao menos um item retornado tem cidade "São Paulo"
         self.assertTrue(any(c["cidade"] == "São Paulo" for c in response.data["results"]))
 
     def test_buscar_condominio_por_nome(self):

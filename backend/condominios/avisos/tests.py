@@ -1,7 +1,10 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from .models import Condominio, Aviso, AdministradorGeral
+
+from condominios.condominio.models import Condominio
+from condominios.administradorgeral.models import AdministradorGeral
+from condominios.avisos.models import Aviso
 
 
 class AvisoAPITests(APITestCase):
@@ -12,7 +15,11 @@ class AvisoAPITests(APITestCase):
     def setUp(self):
         # Cria e autentica um usuário com perfil de AdministradorGeral (síndico)
         self.user = User.objects.create_user(username='sindico', password='admin123')
-        self.admin_profile = AdministradorGeral.objects.create(user=self.user, nome='Síndico', telefone='(11) 98888-0000')
+        AdministradorGeral.objects.create(
+            user=self.user,
+            nome='Síndico',
+            telefone='(11) 98888-0000'
+        )
         self.client.force_authenticate(user=self.user)
 
         # Cria um condomínio base
@@ -38,15 +45,20 @@ class AvisoAPITests(APITestCase):
 
     def test_listar_avisos(self):
         """Testa a listagem de avisos existentes"""
+        # Cria pelo menos um aviso
         Aviso.objects.create(
             titulo="Manutenção na piscina",
             mensagem="A manutenção será realizada no dia 15 de março.",
             condominio=self.condominio,
             publicado_por=self.user
         )
+
         response = self.client.get('/api/avisos/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data), 1)
+
+        # Suporta respostas paginadas (campo 'results') ou não
+        itens = response.data.get('results', response.data)
+        self.assertGreaterEqual(len(itens), 1)
 
     def test_editar_aviso(self):
         """Testa a atualização dos dados de um aviso"""
@@ -64,7 +76,7 @@ class AvisoAPITests(APITestCase):
         }
         response = self.client.put(f'/api/avisos/{aviso.id}/', novos_dados, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['titulo'], "Portão fechado - Atualização")
+        self.assertEqual(response.data['titulo'], novos_dados['titulo'])
 
     def test_deletar_aviso(self):
         """Testa a exclusão de um aviso"""

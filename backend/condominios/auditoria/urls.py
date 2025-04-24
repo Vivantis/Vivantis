@@ -1,12 +1,11 @@
-# condominios/urls_auditoria.py
-
-from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views_auditoria import AuditoriaViewSet
+from .views import AuditoriaViewSet  # Ajuste: importa de views.py
 
+# ─────────────────────────────────────────────────────────────
+# Roteador para o módulo de Auditoria
+# ─────────────────────────────────────────────────────────────
 router = DefaultRouter()
-router.register(r'auditorias', AuditoriaViewSet, basename='auditoria')
+router.register(r'auditoria', AuditoriaViewSet, basename='auditoria')
 
-urlpatterns = [
-    path('', include(router.urls)),
-]
+# Exporta as URLs para inclusão no roteador principal
+urlpatterns = router.urls

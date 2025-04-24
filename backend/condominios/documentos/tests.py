@@ -2,7 +2,10 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .models import Condominio, Documento, AdministradorGeral
+
+from condominios.condominio.models import Condominio
+from condominios.documentos.models import Documento
+from condominios.administradorgeral.models import AdministradorGeral
 
 
 class DocumentoAPITests(APITestCase):
@@ -14,13 +17,24 @@ class DocumentoAPITests(APITestCase):
         # Cria e autentica um usuário administrador geral
         self.user = User.objects.create_user(username='sindico', password='admin123')
         self.client.force_authenticate(user=self.user)
-        self.admin = AdministradorGeral.objects.create(user=self.user, nome='Síndico', telefone='(11) 90000-0000')
+        self.admin = AdministradorGeral.objects.create(
+            user=self.user,
+            nome='Síndico',
+            telefone='(11) 90000-0000'
+        )
 
         # Cria um condomínio base
-        self.condominio = Condominio.objects.create(nome="Residencial Aurora", endereco="Rua das Luzes, 101")
+        self.condominio = Condominio.objects.create(
+            nome="Residencial Aurora",
+            endereco="Rua das Luzes, 101"
+        )
 
         # Arquivo simulado
-        self.arquivo_teste = SimpleUploadedFile("regulamento.pdf", b"Fake PDF content", content_type="application/pdf")
+        self.arquivo_teste = SimpleUploadedFile(
+            "regulamento.pdf",
+            b"Fake PDF content",
+            content_type="application/pdf"
+        )
 
         # Dados padrão
         self.dados = {
@@ -49,7 +63,10 @@ class DocumentoAPITests(APITestCase):
         )
         response = self.client.get('/api/documentos/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.data), 1)
+
+        # DRF padrão traz 'results'
+        self.assertIn('results', response.data)
+        self.assertGreaterEqual(len(response.data['results']), 1)
 
     def test_deletar_documento(self):
         """Testa a exclusão de um documento"""
@@ -62,6 +79,7 @@ class DocumentoAPITests(APITestCase):
         )
         response = self.client.delete(f'/api/documentos/{documento.id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Documento.objects.filter(id=documento.id).exists())
 
     def test_filtrar_documentos_por_tipo(self):
         """Testa a filtragem de documentos pelo campo 'tipo'"""
@@ -79,7 +97,7 @@ class DocumentoAPITests(APITestCase):
             condominio=self.condominio,
             enviado_por=self.user
         )
-        response = self.client.get(f'/api/documentos/?tipo=regulamento')
+        response = self.client.get('/api/documentos/?tipo=regulamento')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         for doc in response.data['results']:
             self.assertEqual(doc['tipo'], 'regulamento')
@@ -109,7 +127,10 @@ class DocumentoAPITests(APITestCase):
 
     def test_filtrar_documentos_por_condominio(self):
         """Testa a filtragem por condomínio"""
-        outro_condominio = Condominio.objects.create(nome="Condomínio B", endereco="Rua B, 222")
+        outro_condominio = Condominio.objects.create(
+            nome="Condomínio B",
+            endereco="Rua B, 222"
+        )
 
         Documento.objects.create(
             titulo="Doc 1",

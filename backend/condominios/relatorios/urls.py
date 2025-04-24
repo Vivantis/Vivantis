@@ -1,10 +1,7 @@
-from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import RelatorioViewSet
+from .views import RelatorioViewSet  # importa do views.py
 
 router = DefaultRouter()
-router.register(r'', RelatorioViewSet, basename='relatorios')
+router.register(r'relatorios', RelatorioViewSet, basename='relatorios')
 
-urlpatterns = [
-    path('', include(router.urls)),
-]
+urlpatterns = router.urls
